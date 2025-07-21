@@ -1,6 +1,6 @@
 
 clone the repo using
-
+`https://github.com/AdityaMISHRA2803/DocuWell--.git`
 
 ## How to run the project
 
