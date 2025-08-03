@@ -1,10 +1,6 @@
 const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
-<<<<<<< HEAD
-=======
-// const ejs = require("ejs");
->>>>>>> 4843a4fd38a4b89cf775f44a4a3974757e3ac81e
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const passport = require("passport");
@@ -13,11 +9,7 @@ const { login } = require("./controller/login");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const connectDB = require("./config/db");
-<<<<<<< HEAD
 
-=======
-require("./config/passport")(passport);
->>>>>>> 4843a4fd38a4b89cf775f44a4a3974757e3ac81e
 const appointmentRoute = require("./routes/appointmentRoute");
 const profileRoute = require("./routes/profileRoute");
 const dashboardRoute = require("./routes/dashRoute");
@@ -27,30 +19,17 @@ const adminRoute = require("./routes/adminRoute");
 
 dotenv.config({ path: "./config/config.env" });
 
-<<<<<<< HEAD
 // Connecting to database
-=======
-//connecting to database from ./config/db.js
->>>>>>> 4843a4fd38a4b89cf775f44a4a3974757e3ac81e
 connectDB();
 
 const app = express();
 
 app.use(express.static(path.join(__dirname, "/public")));
-<<<<<<< HEAD
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(morgan("dev"));
 
 // Session middleware
-=======
-
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-
-app.use(morgan("dev"));
-
->>>>>>> 4843a4fd38a4b89cf775f44a4a3974757e3ac81e
 app.use(
   session({
     secret: "keyboard cat",
@@ -62,7 +41,6 @@ app.use(
   })
 );
 
-<<<<<<< HEAD
 // View engine setup
 app.set("views", path.join(__dirname, "./views"));
 app.set("view engine", "ejs");
@@ -73,15 +51,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes
-=======
-// app.use(expressLayout);
-app.set("views", path.join(__dirname, "./views"));
-app.set("view engine", "ejs");
-
-app.use(passport.initialize());
-app.use(passport.session());
-
->>>>>>> 4843a4fd38a4b89cf775f44a4a3974757e3ac81e
 app.use("/", require("./routes/auth"));
 app.use("/dashboard", ensureAuth, dashboardRoute);
 app.use("/appointment", ensureAuth, appointmentRoute);
@@ -89,12 +58,10 @@ app.use("/disease", ensureAuth, diseaseRoute);
 app.use("/calorie_tracker", ensureAuth, calorieRoute);
 app.use("/profile", ensureAuth, profileRoute);
 app.use("/admin", adminRoute);
+app.use("/help", require("./routes/helpRouter"));
 
-<<<<<<< HEAD
 // ✅ Start the email reminder service
 require("./reminderCron");
-=======
->>>>>>> 4843a4fd38a4b89cf775f44a4a3974757e3ac81e
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, console.log(`Server running on ${PORT}`));

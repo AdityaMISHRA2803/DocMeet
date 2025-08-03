@@ -1,40 +1,36 @@
 const mongoose = require("mongoose");
 
 const appointmentSchema = new mongoose.Schema({
-    user: {
-        type: mongoose.Schema.ObjectId,
-        ref: "User",
-    },
-    date: {
-        type: Date,
-        default: Date.now(),
-    },
-    description: {
-        type: String,
-    },
-    start_time: {
-        type: String,
-    },
-    end_time: {
-        type: String,
-    },
-<<<<<<< HEAD
-    reminderSent: {
-        type: Boolean,
-        default: false
-},
-
-=======
->>>>>>> 4843a4fd38a4b89cf775f44a4a3974757e3ac81e
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: "User",
+  },
+  date: {
+    type: Date,
+    default: Date.now(),
+  },
+  description: {
+    type: String,
+  },
+  start_time: {
+    type: String,
+  },
+  end_time: {
+    type: String,
+  },
+  reminderSent: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 appointmentSchema.pre(/^find/, function (next) {
-    this.populate({
-        path: "user",
-        select:
-            "firstName lastName userDetails.mobile userDetails.gen _id -appointments",
-    });
-    next();
+  this.populate({
+    path: "user",
+    select:
+      "firstName lastName userDetails.mobile userDetails.gen _id -appointments",
+  });
+  next();
 });
 
 module.exports = mongoose.model("Appointment", appointmentSchema);
