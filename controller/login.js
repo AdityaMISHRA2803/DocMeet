@@ -1,4 +1,5 @@
 const User = require("../models/User");
+<<<<<<< HEAD
 const { sendWelcomeEmail } = require("../utils/mailer");
 
 exports.login = async (req, res) => {
@@ -21,4 +22,14 @@ exports.login = async (req, res) => {
     console.error("Login error:", err);
     res.status(500).send("Internal server error during login");
   }
+=======
+
+exports.login = async (req, res) => {
+
+  const user = await User.find({ googleId: req.user.googleId }).lean();
+  //   console.log(user[0]);
+  const foundUser = user[0];
+  //   console.log(req.user.displayName);
+  res.redirect("/dashboard");
+>>>>>>> 4843a4fd38a4b89cf775f44a4a3974757e3ac81e
 };

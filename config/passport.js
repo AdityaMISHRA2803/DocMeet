@@ -7,8 +7,13 @@ const dotenv = require("dotenv");
 dotenv.config({ path: "./config/config.env" });
 
 module.exports = function (passport) {
+<<<<<<< HEAD
   console.log(process.env.GOOGLE_CLIENT_ID);
   console.log(process.env.GOOGLE_CLIENT_SECRET);
+=======
+  // console.log(process.env.GOOGLE_CLIENT_ID);
+  // console.log(process.env.GOOGLE_CLIENT_SECRET);
+>>>>>>> 4843a4fd38a4b89cf775f44a4a3974757e3ac81e
   passport.use(
     new GoogleStrategy(
       {
@@ -16,7 +21,10 @@ module.exports = function (passport) {
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         callbackURL: "/auth/google/callback",
       },
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4843a4fd38a4b89cf775f44a4a3974757e3ac81e
       async (accessToken, refreshToken, profile, done) => {
         const newUser = {
           googleId: profile.id,

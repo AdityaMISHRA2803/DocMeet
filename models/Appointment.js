@@ -18,11 +18,14 @@ const appointmentSchema = new mongoose.Schema({
     end_time: {
         type: String,
     },
+<<<<<<< HEAD
     reminderSent: {
         type: Boolean,
         default: false
 },
 
+=======
+>>>>>>> 4843a4fd38a4b89cf775f44a4a3974757e3ac81e
 });
 
 appointmentSchema.pre(/^find/, function (next) {
