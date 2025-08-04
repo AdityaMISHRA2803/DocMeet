@@ -8,18 +8,17 @@ router.get("/", ensureGuest, (req, res) => {
   res.status(200).render("login");
 });
 
-// router.get("/dashboard", ensureAuth, login);
-
 // @desc    Auth with Google
 // @route   GET /auth/google
 router.get(
-  "/auth/google",
+  "/google",
   passport.authenticate("google", { scope: ["profile"] })
 );
 
 // @desc    Google auth callback
 // @route   GET /auth/google/callback
-router.get("/auth/google/callback", passport.authenticate("google", { failureRedirect: "/" }),
+router.get("/google/callback",
+  passport.authenticate("google", { failureRedirect: "/" }),
   (req, res) => {
     res.redirect("/dashboard");
   }
@@ -27,7 +26,7 @@ router.get("/auth/google/callback", passport.authenticate("google", { failureRed
 
 //@desc logout user
 //@route /auth/logout
-router.get("/auth/logout", (req, res) => {
+router.get("/logout", (req, res) => {
   req.logout(function (err) {
     if (err) {
       return next(err);
