@@ -1,10 +1,18 @@
 {
-    "version": 2,
-    "builds": [{ "src": "./index.js", "use": "@vercel/node" }],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "/"
-      }
-    ]
-  }
+  "version": 2,
+  "builds": [{ "src": "index.js", "use": "@vercel/node" }],
+  "routes": [
+    {
+      "src": "/auth/google/callback",
+      "dest": "/index.js"
+    },
+    {
+      "src": "/auth/(.*)",
+      "dest": "/index.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.js"
+    }
+  ]
+}
