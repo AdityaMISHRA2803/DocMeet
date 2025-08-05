@@ -6,14 +6,38 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Disease Data</title>
-  <!-- GOOGLE FONTS -->
+
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet" />
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&amp;family=Poppins:wght@400;500;600&amp;display=swap" />
   <link rel="stylesheet" href="/disease.css" />
-  <!-- <link rel="stylesheet" href=".//Navigation_bar.css"> -->
+
+  <style>
+    #spinner {
+      display: none;
+      text-align: center;
+      margin: 20px auto;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .loader {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #555;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 
 <body>
@@ -21,16 +45,23 @@
     <a href="/dashboard" class="back">⬅️BACK</a>&nbsp;&nbsp;Get List of
     Diseases by entering the body part you want to search for.
   </h1>
-  <div style="text-align: center; margin-top: 20px; color: #ff4d4d; font-family: 'Poppins', sans-serif;">
-  <strong>Note:</strong> Real-time disease data fetching is currently under development. This feature will be available soon.
-</div>
 
-  <section>
-    <label for="full-name">Body Part: </label>
-    <input type="text" name="body_part" id="body_part" placeholder="Body Part" required
+  <div style="text-align: center; margin-top: 20px; color: #ff4d4d; font-family: 'Poppins', sans-serif;">
+    <strong>Note:</strong> Real-time disease data powered by Doctor Chatbot API.
+  </div>
+
+  <section style="text-align: center; margin-top: 30px;">
+    <label for="body_part">Body Part: </label>
+    <input type="text" name="body_part" id="body_part" placeholder="e.g., brain, stomach, eye" required
       style="color: rgb(80, 78, 78)" />
     <input type="submit" value="Show Data" id="submit" onclick="data()" />
   </section>
+
+  <div id="spinner">
+    <div class="loader"></div>
+    <p>Loading disease information...</p>
+  </div>
+
   <ul id="myList">
     <li>
       <h1>DISEASES:</h1>
@@ -38,96 +69,76 @@
   </ul>
 
   <script>
-    var myList = document.getElementById("myList");
-    function data() {
-      myList.innerHTML = "";
-      var body_part = document.getElementById("body_part").value;
+    function getSpecialization(bodyPart) {
+      const map = {
+        brain: "neurosurgery",
+        heart: "cardiology",
+        eye: "ophthalmology",
+        stomach: "gastroenterology",
+        skin: "dermatology",
+        lung: "pulmonology",
+        kidney: "nephrology",
+        liver: "hepatology",
+        teeth: "dentistry",
+        bone: "orthopedics",
+        nose: "ENT",
+        throat: "ENT",
+        blood: "hematology"
+      };
+      return map[bodyPart.toLowerCase()] || "general medicine";
+    }
 
-      if (body_part === 'stomach') {
-        var diseases = ["Gastritis", "Peptic Ulcer Disease(PUD)", "Stomach Flu", "Gastroparesis", "Stomach Cancer", "Constipation", "Gastroenteritis"]
-        var i = diseases.length;
-        for (var j = 0; j < i; j++) {
-          var node = document.createElement("LI");
-          var textnode = document.createTextNode(
-            diseases[j]
+    function formatResponse(text) {
+      const lines = text.split(/[\.\n]/).filter(line => line.trim().length > 0);
+      return lines.map(line => `<li>🩺 ${line.trim()}</li>`).join('');
+    }
 
-          );
-          node.appendChild(textnode);
-          myList.appendChild(node);
-        }
+    async function data() {
+      const myList = document.getElementById("myList");
+      const body_part = document.getElementById("body_part").value.trim().toLowerCase();
+      const spinner = document.getElementById("spinner");
+
+      myList.innerHTML = "<li><h1>DISEASES:</h1></li>";
+
+      if (!body_part) {
+        alert("Please enter a body part.");
+        return;
       }
 
-      if (body_part === 'teeth') {
-        var diseases = ["ToothAche", "Stained Teeth", "Cavities", "Cracked Teeth", "Sensitivity"]
-        var i = diseases.length;
-        for (var j = 0; j < i; j++) {
-          var node = document.createElement("LI");
-          var textnode = document.createTextNode(
-            diseases[j]
+      const specialization = getSpecialization(body_part);
+      const message = `What diseases are related to the ${body_part}?`;
 
-          );
-          node.appendChild(textnode);
-          myList.appendChild(node);
-        }
-      }
-      if (body_part === 'eye') {
-        var diseases = ["Cataract", "Myopia", "Hypermetropia", "Glaucoma", "Macular Degeneration."]
-        var i = diseases.length;
-        for (var j = 0; j < i; j++) {
-          var node = document.createElement("LI");
-          var textnode = document.createTextNode(
-            diseases[j]
+      // Show loading spinner
+      spinner.style.display = "block";
 
-          );
-          node.appendChild(textnode);
-          myList.appendChild(node);
-        }
+      try {
+        const response = await fetch("https://ai-doctor-api-ai-medical-chatbot-healthcare-ai-assistant.p.rapidapi.com/chat?noqueue=1", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-rapidapi-host": "ai-doctor-api-ai-medical-chatbot-healthcare-ai-assistant.p.rapidapi.com",
+            "x-rapidapi-key": "017118149bmshc01c294606b9939p1704f8jsn273ee77e52df"
+          },
+          body: JSON.stringify({
+            message: message,
+            specialization: specialization,
+            language: "english"
+          })
+        });
+
+        const data = await response.json();
+
+        const responseText = formatResponse(data.response);
+        myList.innerHTML += responseText;
+
+      } catch (error) {
+        console.error(error);
+        const li = document.createElement("LI");
+        li.innerText = "An error occurred while fetching data. Please try again.";
+        myList.appendChild(li);
+      } finally {
+        spinner.style.display = "none";
       }
-<<<<<<< HEAD
-      
-=======
-      /*
->>>>>>> 4843a4fd38a4b89cf775f44a4a3974757e3ac81e
-            fetch(`https://healthwise.p.rapidapi.com/body/diseases/${body_part}`, {
-              method: "GET",
-              credentials: "omit",
-              headers: {
-                "x-rapidapi-host": "healthwise.p.rapidapi.com",
-                "x-rapidapi-key":
-                  "1c3194eaacmsh0679b7666062122p115ac7jsn58ae6ac30aa6",
-              },
-            })
-              .then((response) => {
-                response.json().then((res) => {
-                  var i = res.data.result[0].causes.length;
-                  for (var j = 0; j < i; j++) {
-                    //  console.log(res.data.result[0].causes[j].illness);
-                    diseases.push(res.data.result[0].causes[j].illness);
-                    var node = document.createElement("LI");
-                    var textnode = document.createTextNode(
-                      res.data.result[0].causes[j].illness
-                    );
-                    node.appendChild(textnode);
-                    myList.appendChild(node);
-                  }
-                })
-                .catch((err) => {
-                  var node = document.createElement("LI");
-                  var textnode = document.createTextNode("No Diseases Found");
-                  node.appendChild(textnode);
-                  myList.appendChild(node);
-                  alert(
-                    "Choose among : | 1 | brain | 2 | eyes | 3 | ears | 4 | nose | 5 | lips | 6 |tongue | 7 | jaw | 8 | neck | 9 | esophagus | 10 | lung | 11 | heart | 12 | rightarm | 13 | leftarm | 14 | elbows | 15 | hands | 16 | fingers | 17 | liver | 18 | spleen | 19 | stomach | 20 | pancreas | 21 | gallbladder | 22 | kidneys | 23 | smallintestin | | 24 | colon | | 25 | bladder | | 26 | testicles | | 27 | vagina | | 28 | malegenital | 29 | femalegenital | | 30 | anus | | 31 | leftleg | 32 | right_leg | 33 | knees | 34 | foot | 35 | heel | 36 | toes |"
-                  );
-                });
-              })
-              .catch((err) => {
-                console.error(err);
-<<<<<<< HEAD
-              });
-=======
-              });*/
->>>>>>> 4843a4fd38a4b89cf775f44a4a3974757e3ac81e
     }
   </script>
 </body>
