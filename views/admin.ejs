@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="width=device-width , initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/Admin.css">
     <link rel="stylesheet" href="/Navigation_bar.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
@@ -11,11 +12,12 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
 </head>
 
 <body>
     <div class="adminContainer">
+        
+        <!-- Navigation -->
         <div class="navigation">
             <ul>
                 <li class="list active">
@@ -26,66 +28,74 @@
                 </li>
             </ul>
         </div>
+
+        <!-- Heading -->
         <div class="heading">
             <h1>Admin Panel</h1>
         </div>
-        <div class="wrapper">
 
+        <!-- Table Wrapper -->
+        <div class="wrapper">
             <table class="table table-bordered table-hover table-striped" id="appointment_list">
                 <thead>
                     <tr>
-                        <th scope="col" class="text-center align-middle" id="date2">Name</th>
+                        <th scope="col" class="text-center align-middle">Name</th>
                         <th scope="col" class="text-center align-middle">Mobile Number</th>
                         <th scope="col" class="text-center align-middle">Gender</th>
                         <th scope="col" class="text-center align-middle">Date</th>
                         <th scope="col" class="text-center align-middle">Description</th>
                         <th scope="col" class="text-center align-middle">Start time</th>
                         <th scope="col" class="text-center align-middle">End time</th>
-                        <th scope="col" class="text-center align-middle" id="action">Action</th>
+                        <th scope="col" class="text-center align-middle">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <%if(appointments.length> 0) {%>
-                        <% for(var i=0;i<appointments.length;i++) { %>
-                            <tr class="text-center align-middle">
-                                <td id="date2">
+                    <% if (appointments.length > 0) { %>
+                        <% for (var i = 0; i < appointments.length; i++) { %>
+                            <tr>
+                                <td data-label="Name">
                                     <%= appointments[i].user.firstName %>
                                 </td>
-                                <td>
+                                <td data-label="Mobile Number">
                                     <%= appointments[i].user.userDetails[0].mobile %>
                                 </td>
-                                <td>
+                                <td data-label="Gender">
                                     <%= appointments[i].user.userDetails[0].gen %>
-
                                 </td>
-                                <td>
+                                <td data-label="Date">
                                     <%= appointments[i].date.toString().slice(0,15) %>
                                 </td>
-                                <td style="max-width:30vw">
+                                <td data-label="Description" style="max-width:30vw">
                                     <%= appointments[i].description %>
                                 </td>
-                                <td>
+                                <td data-label="Start time">
                                     <%= appointments[i].start_time %>
                                 </td>
-                                <td>
+                                <td data-label="End time">
                                     <%= appointments[i].end_time %>
                                 </td>
-                                <td id="action">
-                                    <button class="btn btn-danger btn-sm" onclick="Delete(this)"><i
-                                            class="fas fa-trash"></i></button>
+                                <td data-label="Action">
+                                    <button class="btn btn-danger btn-sm" onclick="Delete(this)">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
-                            <% } %>
-                                <% } %>
+                        <% } %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="8" class="text-center">No appointments available</td>
+                        </tr>
+                    <% } %>
                 </tbody>
             </table>
         </div>
     </div>
+
+    <script>
+        function Delete(x) {
+            x.parentElement.parentElement.remove();
+        }
+    </script>
 </body>
-<script>
-    function Delete(x) {
-        x.parentElement.parentElement.remove();
-    }
-</script>
 
 </html>
