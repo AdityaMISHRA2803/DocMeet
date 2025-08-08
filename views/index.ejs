@@ -5,266 +5,364 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
-    integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous" />
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&amp;family=Poppins:wght@400;500;600&amp;display=swap">
-  <script src="https://kit.fontawesome.com/d8ab0e903f.js"></script>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <title>Health Management Webapp</title>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#211042',
-            secondary: '#326ad1',
-            accent: '#2a029f',
-          },
-          fontFamily: {
-            poppins: ['Poppins', 'sans-serif'],
-          },
-        }
-      }
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f9fa;
     }
-  </script>
-  <style type="text/tailwindcss">
-    @layer utilities {
-      .bg-gradient-nav {
-        background-image: radial-gradient(circle at 17% 77%, rgba(17, 17, 17,0.04) 0%, rgba(17, 17, 17,0.04) 50%,rgba(197, 197, 197,0.04) 50%, rgba(197, 197, 197,0.04) 100%),
-                        radial-gradient(circle at 26% 17%, rgba(64, 64, 64,0.04) 0%, rgba(64, 64, 64,0.04) 50%,rgba(244, 244, 244,0.04) 50%, rgba(244, 244, 244,0.04) 100%),
-                        radial-gradient(circle at 44% 60%, rgba(177, 177, 177,0.04) 0%, rgba(177, 177, 177,0.04) 50%,rgba(187, 187, 187,0.04) 50%, rgba(187, 187, 187,0.04) 100%),
-                        linear-gradient(19deg, rgb(28, 117, 250), rgb(34, 2, 159));
+    
+    /* Navigation gradient */
+    .bg-nav-gradient {
+      background: linear-gradient(19deg, rgb(28, 117, 250), rgb(34, 2, 159));
+    }
+    
+    /* Calendar styling */
+    .calendar-container {
+      width: 100%;
+      max-width: 310px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    
+    .calendar-header {
+      background: #2956d3;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 1px;
+      background: #edf2f7;
+    }
+    
+    .calendar-day {
+      padding: 12px 5px;
+      text-align: center;
+      background: white;
+      font-size: 0.9rem;
+      min-height: 40px;
+    }
+    
+    .calendar-day.today {
+      background: #168bdf;
+      color: white;
+      font-weight: bold;
+    }
+    
+    .calendar-day.other-month {
+      color: #a0aec0;
+      opacity: 0.5;
+    }
+    
+    @media (max-width: 768px) {
+      .calendar-container {
+        max-width: 100%;
       }
     }
   </style>
 </head>
 
-<body class="h-full font-poppins bg-white flex">
-  <!-- Mobile menu toggle -->
-  <div class="lg:hidden fixed top-5 left-5 z-50 text-white text-2xl cursor-pointer menu-toggle">
+<body class="d-flex">
+  <!-- Mobile Menu Toggle -->
+  <button class="d-lg-none btn btn-primary position-fixed top-3 start-3 z-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
     <i class="fas fa-bars"></i>
-  </div>
+  </button>
 
-  <!-- navigation -->
-  <div class="navigation fixed h-full w-16 bg-gradient-nav shadow-lg border-l-8 border-primary overflow-x-hidden transition-all duration-300 hover:w-64 z-40">
-    <ul class="absolute top-0 left-0 w-full pt-10 pl-1">
-      <li class="list active w-full rounded-tl-2xl rounded-bl-2xl my-1">
-        <a href="/dashboard" class="relative block w-full flex items-center text-white no-underline">
-          <span class="icon block min-w-[60px] h-15 leading-[70px] text-center">
-            <i class="fas fa-home text-xl relative z-10"></i>
-          </span>
-          <span class="title block pl-2 h-15 leading-[60px] whitespace-nowrap text-lg font-medium">Dashboard</span>
-        </a>
-      </li>
-
-      <li class="list w-full rounded-tl-2xl rounded-bl-2xl my-1">
-        <a href="/appointment" class="relative block w-full flex items-center text-white no-underline">
-          <span class="icon block min-w-[60px] h-15 leading-[70px] text-center">
-            <i class="fas fa-calendar-check text-xl relative z-10"></i>
-          </span>
-          <span class="title block pl-2 h-15 leading-[60px] whitespace-nowrap text-lg font-medium">Appointment</span>
-        </a>
-      </li>
-      
-      <li class="list w-full rounded-tl-2xl rounded-bl-2xl my-1">
-        <a href="/disease" class="relative block w-full flex items-center text-white no-underline">
-          <span class="icon block min-w-[60px] h-15 leading-[70px] text-center">
-            <i class="fas fa-search-plus text-xl relative z-10"></i>
-          </span>
-          <span class="title block pl-2 h-15 leading-[60px] whitespace-nowrap text-lg font-medium">Search Disease</span>
-        </a>
-      </li>
-      
-      <li class="list w-full rounded-tl-2xl rounded-bl-2xl my-1">
-        <a href="/calorie_tracker" class="relative block w-full flex items-center text-white no-underline">
-          <span class="icon block min-w-[60px] h-15 leading-[70px] text-center">
-            <i class="fas fa-utensils text-xl relative z-10"></i>
-          </span>
-          <span class="title block pl-2 h-15 leading-[60px] whitespace-nowrap text-lg font-medium">Diet Tracker</span>
-        </a>
-      </li>
-      
-      <li class="list w-full rounded-tl-2xl rounded-bl-2xl my-1">
-        <a href="/profile" class="relative block w-full flex items-center text-white no-underline">
-          <span class="icon block min-w-[60px] h-15 leading-[70px] text-center">
-            <i class="fas fa-user-cog text-xl relative z-10"></i>
-          </span>
-          <span class="title block pl-2 h-15 leading-[60px] whitespace-nowrap text-lg font-medium">Edit Profile</span>
-        </a>
-      </li>
-      
-      <li class="list w-full rounded-tl-2xl rounded-bl-2xl my-1">
-        <a href="/help" class="relative block w-full flex items-center text-white no-underline">
-          <span class="icon block min-w-[60px] h-15 leading-[70px] text-center">
-            <i class="far fa-question-circle text-xl relative z-10"></i>
-          </span>
-          <span class="title block pl-2 h-15 leading-[60px] whitespace-nowrap text-lg font-medium">Help</span>
-        </a>
-      </li>
-      
-      <li class="list w-full rounded-tl-2xl rounded-bl-2xl my-1">
-        <a href="/auth/logout" class="relative block w-full flex items-center text-white no-underline">
-          <span class="icon block min-w-[60px] h-15 leading-[70px] text-center">
-            <i class="fas fa-sign-out-alt text-xl relative z-10"></i>
-          </span>
-          <span class="title block pl-2 h-15 leading-[60px] whitespace-nowrap text-lg font-medium">Sign Out</span>
-        </a>
-      </li>
-    </ul>
-  </div>
-  <!-- end of navigation -->
-
-  <!-- wrapper -->
-  <div class="wrapper ml-16 w-[calc(100%-4rem)] h-full">
-    <!-- search starts -->
-    <div class="search border-b border-gray-200 mx-8 py-4 relative">
-      <div class="logo absolute right-0 top-0 text-blue-500 z-10 text-2xl p-4">
-        <i class="fas fa-laptop-medical"></i>
-      </div>
-      <form class="search-form flex relative w-full">
-        <label class="block w-full">
-          <button type="submit" class="searchButton absolute top-2 left-3 bg-transparent border-none cursor-pointer text-gray-400">
-            <i class="fa fa-search text-lg"></i>
-          </button>
-          <input type="search" id="site-search" class="search-input w-full pl-10 h-12 border-none focus:outline-none" 
-                 placeholder="Global Search" autocomplete="on" />
-        </label>
-      </form>
+  <!-- Sidebar Navigation -->
+  <div class="offcanvas-lg offcanvas-start bg-nav-gradient text-white vh-100" tabindex="-1" id="sidebar" style="width: 280px;">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title">Menu</h5>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#sidebar"></button>
     </div>
-    <!-- search ends -->
+    <div class="offcanvas-body d-flex flex-column px-0">
+      <ul class="nav flex-column">
+        <li class="nav-item active rounded-end py-2">
+          <a class="nav-link text-white d-flex align-items-center" href="/dashboard">
+            <i class="fas fa-home fs-5 mx-3"></i>
+            <span class="fs-5">Dashboard</span>
+          </a>
+        </li>
+        
+        <li class="nav-item rounded-end py-2">
+          <a class="nav-link text-white d-flex align-items-center" href="/appointment">
+            <i class="fas fa-calendar-check fs-5 mx-3"></i>
+            <span class="fs-5">Appointment</span>
+          </a>
+        </li>
+        
+        <li class="nav-item rounded-end py-2">
+          <a class="nav-link text-white d-flex align-items-center" href="/disease">
+            <i class="fas fa-search-plus fs-5 mx-3"></i>
+            <span class="fs-5">Search Disease</span>
+          </a>
+        </li>
+        
+        <li class="nav-item rounded-end py-2">
+          <a class="nav-link text-white d-flex align-items-center" href="/calorie_tracker">
+            <i class="fas fa-utensils fs-5 mx-3"></i>
+            <span class="fs-5">Diet Tracker</span>
+          </a>
+        </li>
+        
+        <li class="nav-item rounded-end py-2">
+          <a class="nav-link text-white d-flex align-items-center" href="/profile">
+            <i class="fas fa-user-cog fs-5 mx-3"></i>
+            <span class="fs-5">Edit Profile</span>
+          </a>
+        </li>
+        
+        <li class="nav-item rounded-end py-2">
+          <a class="nav-link text-white d-flex align-items-center" href="/help">
+            <i class="far fa-question-circle fs-5 mx-3"></i>
+            <span class="fs-5">Help</span>
+          </a>
+        </li>
+        
+        <li class="nav-item rounded-end py-2">
+          <a class="nav-link text-white d-flex align-items-center" href="/auth/logout">
+            <i class="fas fa-sign-out-alt fs-5 mx-3"></i>
+            <span class="fs-5">Sign Out</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
 
-    <!-- mainBlock starts -->
-    <div class="main p-6 ml-4 flex flex-col lg:flex-row gap-6 h-[calc(100%-4rem)]">
-      <!-- first block -->
-      <div class="first flex-1 rounded-xl shadow-lg mb-6 flex flex-col order-1">
-        <!-- task-calendar block -->
-        <div class="task-calendar grid">
-          <!-- task header -->
-          <div class="taskhead m-4 ml-8 p-4">
-            <!-- details -->
-            <div class="user">
-              <h2 class="text-xl font-semibold">Hello, <%= foundUser.displayName%></h2>
-            </div>
-            <!-- end of details -->
+  <!-- Main Content -->
+  <div class="flex-grow-1 ms-lg-5">
+    <!-- Search Bar -->
+    <div class="search-bar py-3 border-bottom">
+      <div class="container-fluid">
+        <div class="row align-items-center">
+          <div class="col">
+            <form class="d-flex position-relative">
+              <button class="btn position-absolute start-0 top-50 translate-middle-y bg-transparent border-0" type="submit">
+                <i class="fas fa-search text-secondary"></i>
+              </button>
+              <input class="form-control ps-5 border-0 shadow-none" type="search" placeholder="Global Search" aria-label="Search">
+            </form>
           </div>
-          <!-- taskhead ends -->
+          <div class="col-auto">
+            <i class="fas fa-laptop-medical fs-3 text-primary"></i>
+          </div>
+        </div>
+      </div>
+    </div>
 
-          <!-- task-block -->
-          <div class="task-block border-t border-gray-200 p-6 flex flex-col justify-around h-full">
-            <div class="column2 mt-8 rounded-lg shadow-lg p-6">
-              <div class="mednaam">
-                <form action="/dashboard" method="POST" id="myform">
-                  <h2 class="text-xl font-semibold mb-4">Medicine Schedule</h2>
-                  <div class="one-row flex flex-col md:flex-row gap-4 mb-4">
-                    <input type="text" id="medname" name="Medicine_name" placeholder="Medicine name" 
-                           class="w-full md:w-1/3 p-3 rounded-lg border border-gray-300">
-                    <input type="text" id="timing" name="medicine_time" placeholder="before/after eating" 
-                           class="w-full md:w-1/3 p-3 rounded-lg border border-gray-300">
-                    <input type="text" id="frequency" name="medicine_freq" placeholder="Times a day" 
-                           class="w-full md:w-1/3 p-3 rounded-lg border border-gray-300">
+    <!-- Dashboard Content -->
+    <div class="container-fluid py-4">
+      <div class="row g-4">
+        <!-- Main Content Column -->
+        <div class="col-lg-8">
+          <!-- Welcome Header -->
+          <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body">
+              <h2 class="card-title mb-0">Hello, <%= foundUser.displayName %></h2>
+            </div>
+          </div>
+
+          <!-- Medicine Schedule -->
+          <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body">
+              <h3 class="card-title mb-4">Medicine Schedule</h3>
+              
+              <form action="/dashboard" method="POST" id="myform" class="mb-4">
+                <div class="row g-3">
+                  <div class="col-md-4">
+                    <input type="text" class="form-control" id="medname" name="Medicine_name" placeholder="Medicine name">
                   </div>
-                  <button type="submit" class="addMed px-4 py-2 rounded-full m-2 text-white bg-blue-600 border-none">
-                    Add Medicines
-                  </button>
-                </form>
-              </div>
-              <div class="medlist mt-6">
-                <h2 class="text-xl font-semibold mb-4">Medicine List</h2>
-                <div class="overflow-x-auto">
-                  <table id="MEDicines" class="w-full rounded-lg border border-gray-200 overflow-hidden">
-                    <thead class="bg-blue-500 bg-opacity-45">
-                      <tr>
-                        <th class="p-3 text-center">Medicine name</th>
-                        <th class="p-3 text-center">Before/After Eating</th>
-                        <th class="p-3 text-center">Frequency</th>
-                        <th class="p-3 text-center">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <%if(foundUser.details.length> 0) {%>
-                        <%for(var i=0;i<foundUser.details.length; i++){%>
-                          <tr class="text-center align-middle">
-                            <td class="p-3"><%= foundUser.details[i].medname%></td>
-                            <td class="p-3"><%= foundUser.details[i].time %></td>
-                            <td class="p-3"><%= foundUser.details[i].freq %></td>
-                            <td class="p-3">
-                              <button class="btn btn-danger btn-sm del_row bg-red-500 text-white p-1 rounded" onclick="Delete(this)">
-                                <i class="fas fa-trash"></i>
-                              </button>
-                            </td>
-                          </tr>
-                        <% } %>
-                      <% } %>
-                    </tbody>
-                  </table>
+                  <div class="col-md-4">
+                    <input type="text" class="form-control" id="timing" name="medicine_time" placeholder="before/after eating">
+                  </div>
+                  <div class="col-md-4">
+                    <input type="text" class="form-control" id="frequency" name="medicine_freq" placeholder="Times a day">
+                  </div>
                 </div>
+                <button type="submit" class="btn btn-primary mt-3">Add Medicines</button>
+              </form>
+              
+              <h3 class="card-title mb-3">Medicine List</h3>
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="MEDicines">
+                  <thead class="table-primary">
+                    <tr>
+                      <th>Medicine name</th>
+                      <th>Before/After Eating</th>
+                      <th>Frequency</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if(foundUser.details.length > 0) { %>
+                      <% for(var i=0; i<foundUser.details.length; i++) { %>
+                        <tr class="text-center align-middle">
+                          <td><%= foundUser.details[i].medname %></td>
+                          <td><%= foundUser.details[i].time %></td>
+                          <td><%= foundUser.details[i].freq %></td>
+                          <td>
+                            <button class="btn btn-danger btn-sm" onclick="Delete(this)">
+                              <i class="fas fa-trash"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      <% } %>
+                    <% } %>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
-          <!-- task-block ends-->
         </div>
-        <!-- task-calendar block ends -->
-      </div>
-      <!-- first block ends -->
 
-      <!-- second block -->
-      <div class="second flex flex-col lg:w-1/3 gap-4">
-        <!-- task-graph block -->
-        <div class="task h-auto rounded-xl shadow-lg">
-          <div class="panelHeader flex items-center border-b border-gray-200 p-6 h-16">
-            <i class="fas fa-calendar-plus"></i>
-            <span class="calendar ml-2 text-lg font-medium">Calendar</span>
-            <div class="wrapper_calendar w-full p-4">
-              <div id="calendari" class="mx-auto my-4 relative overflow-visible min-h-[373px] w-full max-w-[310px] bg-white rounded-lg shadow-md p-2">
-                <!-- Calendar table will be inserted here by JS -->
+        <!-- Sidebar Column -->
+        <div class="col-lg-4">
+          <!-- Calendar -->
+          <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-3">
+                <i class="fas fa-calendar-plus me-2"></i>
+                <h3 class="card-title mb-0">Calendar</h3>
               </div>
+              <div id="calendar-container" class="calendar-container"></div>
             </div>
           </div>
-          <div class="illu mt-16 p-4">
-            <img src="/undraw_fitness_stats_sht6.png" alt="Fitness illustration" class="w-full h-auto">
+
+          <!-- Fitness Illustration -->
+          <div class="card border-0 shadow-sm">
+            <div class="card-body text-center">
+              <img src="/undraw_fitness_stats_sht6.png" alt="Fitness Stats" class="img-fluid">
+            </div>
           </div>
         </div>
-        <!-- task-graph block ends-->
       </div>
-      <!-- second block ends -->
     </div>
-    <!-- main ends -->
   </div>
-  <!-- wrapper -->
 
-  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   
+  <!-- Calendar Script -->
   <script>
-    // Mobile menu toggle
-    document.querySelector('.menu-toggle').addEventListener('click', function() {
-      document.querySelector('.navigation').classList.toggle('w-16');
-      document.querySelector('.navigation').classList.toggle('w-64');
-      document.querySelector('.wrapper').classList.toggle('ml-16');
-      document.querySelector('.wrapper').classList.toggle('ml-64');
-    });
-    
-    // Close menu when clicking on a link (for mobile)
-    document.querySelectorAll('.navigation a').forEach(link => {
-      link.addEventListener('click', function() {
-        if (window.innerWidth < 1024) {
-          document.querySelector('.navigation').classList.remove('w-64');
-          document.querySelector('.navigation').classList.add('w-16');
-          document.querySelector('.wrapper').classList.remove('ml-64');
-          document.querySelector('.wrapper').classList.add('ml-16');
-        }
-      });
-    });
+    // Calendar data
+    const months = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    const daysShort = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
-    function Delete(x) {
-      x.parentElement.parentElement.remove();
+    // Initialize calendar
+    function initCalendar(date = new Date()) {
+      const container = document.getElementById('calendar-container');
+      container.innerHTML = '';
+      
+      // Create header
+      const header = document.createElement('div');
+      header.className = 'calendar-header';
+      
+      // Navigation buttons
+      const prevBtn = document.createElement('button');
+      prevBtn.innerHTML = '&lt;';
+      prevBtn.onclick = () => {
+        date.setMonth(date.getMonth() - 1);
+        initCalendar(date);
+      };
+      
+      const nextBtn = document.createElement('button');
+      nextBtn.innerHTML = '&gt;';
+      nextBtn.onclick = () => {
+        date.setMonth(date.getMonth() + 1);
+        initCalendar(date);
+      };
+      
+      // Month/year display
+      const title = document.createElement('div');
+      title.innerHTML = `${months[date.getMonth()]} <small>${date.getFullYear()}</small>`;
+      
+      header.appendChild(prevBtn);
+      header.appendChild(title);
+      header.appendChild(nextBtn);
+      container.appendChild(header);
+      
+      // Create days of week header
+      const weekdays = document.createElement('div');
+      weekdays.className = 'grid grid-cols-7 bg-blue-100 text-blue-800 font-medium text-sm';
+      daysShort.forEach(day => {
+        const dayEl = document.createElement('div');
+        dayEl.className = 'p-2 text-center';
+        dayEl.textContent = day;
+        weekdays.appendChild(dayEl);
+      });
+      container.appendChild(weekdays);
+      
+      // Create days grid
+      const grid = document.createElement('div');
+      grid.className = 'calendar-grid';
+      
+      const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+      const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+      const daysInLastMonth = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
+      
+      const today = new Date();
+      const isCurrentMonth = date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear();
+      
+      // Previous month days
+      for (let i = 0; i < firstDay; i++) {
+        const dayEl = document.createElement('div');
+        dayEl.className = 'calendar-day other-month';
+        dayEl.textContent = daysInLastMonth - firstDay + i + 1;
+        grid.appendChild(dayEl);
+      }
+      
+      // Current month days
+      for (let i = 1; i <= daysInMonth; i++) {
+        const dayEl = document.createElement('div');
+        dayEl.className = 'calendar-day';
+        
+        if (isCurrentMonth && i === today.getDate()) {
+          dayEl.classList.add('today');
+        }
+        
+        dayEl.textContent = i;
+        grid.appendChild(dayEl);
+      }
+      
+      // Next month days
+      const totalCells = firstDay + daysInMonth;
+      const remainingCells = totalCells > 35 ? 42 - totalCells : 35 - totalCells;
+      
+      for (let i = 1; i <= remainingCells; i++) {
+        const dayEl = document.createElement('div');
+        dayEl.className = 'calendar-day other-month';
+        dayEl.textContent = i;
+        grid.appendChild(dayEl);
+      }
+      
+      container.appendChild(grid);
     }
 
-    // Initialize calendar (your existing calendar initialization code would go here)
-    // This is just a placeholder - use your actual calendar initialization code
-    document.addEventListener('DOMContentLoaded', function() {
-      // Your calendar initialization code from Calender_dash.js
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', () => {
+      initCalendar();
+      
+      // Delete medicine function
+      window.Delete = function(x) {
+        x.closest('tr').remove();
+      };
     });
   </script>
 </body>
