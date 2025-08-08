@@ -2,145 +2,279 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Disease Data</title>
-
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Disease Information</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet" />
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&amp;family=Poppins:wght@400;500;600&amp;display=swap" />
-  <link rel="stylesheet" href="/disease.css" />
-
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    #spinner {
-      display: none;
-      text-align: center;
-      margin: 20px auto;
+    body {
       font-family: 'Poppins', sans-serif;
+      background-color: #f8f9fa;
+      padding: 20px;
     }
-
-    .loader {
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid #555;
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      animation: spin 1s linear infinite;
-      margin: auto;
+    
+    .header {
+      background: linear-gradient(19deg, rgb(28, 117, 250), rgb(34, 2, 159));
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 30px;
     }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    
+    .feature-card {
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+      height: 100%;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .coming-soon {
+      position: relative;
+    }
+    
+    .coming-soon::after {
+      content: "Coming Soon";
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #ffc107;
+      color: #000;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .body-part-card {
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .body-part-card:hover {
+      background-color: #e9ecef;
+    }
+    
+    .disease-info {
+      background-color: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-top: 20px;
+    }
+    
+    .info-icon {
+      font-size: 2rem;
+      margin-bottom: 15px;
+      color: #2956d3;
     }
   </style>
 </head>
 
 <body>
-  <h1>
-    <a href="/dashboard" class="back">⬅️BACK</a>&nbsp;&nbsp;Get List of
-    Diseases by entering the body part you want to search for.
-  </h1>
-
-  <div style="text-align: center; margin-top: 20px; color: #ff4d4d; font-family: 'Poppins', sans-serif;">
-    <strong>Note:</strong> Real-time disease data powered by Doctor Chatbot API.
+  <div class="container">
+    <!-- Header Section -->
+    <div class="header text-center mb-5">
+      <h1><i class="fas fa-heartbeat me-2"></i> Health Information Center</h1>
+      <p class="mb-0">Explore medical information about common diseases and body systems</p>
+    </div>
+    
+    <!-- Coming Soon Notice -->
+    <div class="alert alert-info mb-4">
+      <i class="fas fa-info-circle me-2"></i>
+      <strong>Note:</strong> The AI-powered disease detection feature is currently under development and will be available soon.
+    </div>
+    
+    <!-- Body Parts Selection -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <h3 class="mb-3"><i class="fas fa-search me-2"></i>Select a Body Part</h3>
+        <div class="row g-3">
+          <div class="col-md-3 col-6">
+            <div class="card body-part-card text-center p-3" onclick="showDiseaseInfo('brain')">
+              <i class="fas fa-brain info-icon"></i>
+              <h5>Brain</h5>
+            </div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="card body-part-card text-center p-3" onclick="showDiseaseInfo('heart')">
+              <i class="fas fa-heart info-icon"></i>
+              <h5>Heart</h5>
+            </div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="card body-part-card text-center p-3" onclick="showDiseaseInfo('lungs')">
+              <i class="fas fa-lungs info-icon"></i>
+              <h5>Lungs</h5>
+            </div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="card body-part-card text-center p-3" onclick="showDiseaseInfo('stomach')">
+              <i class="fas fa-stomach info-icon"></i>
+              <h5>Stomach</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Disease Information Display -->
+    <div id="diseaseInfo" class="disease-info" style="display: none;">
+      <h3 id="diseaseTitle" class="mb-4"></h3>
+      <div id="diseaseContent"></div>
+    </div>
+    
+    <!-- Health Features Section -->
+    <div class="row mt-5">
+      <div class="col-md-4 mb-4">
+        <div class="card feature-card h-100">
+          <div class="card-body">
+            <i class="fas fa-book-medical fa-3x mb-3 text-primary"></i>
+            <h4>Health Encyclopedia</h4>
+            <p>Browse our comprehensive health encyclopedia with information on symptoms, causes, and treatments for hundreds of medical conditions.</p>
+            <button class="btn btn-outline-primary">Explore</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4 mb-4">
+        <div class="card feature-card coming-soon h-100">
+          <div class="card-body">
+            <i class="fas fa-robot fa-3x mb-3 text-primary"></i>
+            <h4>AI Symptom Checker</h4>
+            <p>Our advanced AI will help you understand possible causes for your symptoms (Coming Soon).</p>
+            <button class="btn btn-outline-secondary" disabled>Coming Soon</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4 mb-4">
+        <div class="card feature-card h-100">
+          <div class="card-body">
+            <i class="fas fa-hospital-user fa-3x mb-3 text-primary"></i>
+            <h4>Find Specialists</h4>
+            <p>Connect with qualified medical specialists in your area based on your health concerns.</p>
+            <button class="btn btn-outline-primary">Find Doctors</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <section style="text-align: center; margin-top: 30px;">
-    <label for="body_part">Body Part: </label>
-    <input type="text" name="body_part" id="body_part" placeholder="e.g., brain, stomach, eye" required
-      style="color: rgb(80, 78, 78)" />
-    <input type="submit" value="Show Data" id="submit" onclick="data()" />
-  </section>
-
-  <div id="spinner">
-    <div class="loader"></div>
-    <p>Loading disease information...</p>
-  </div>
-
-  <ul id="myList">
-    <li>
-      <h1>DISEASES:</h1>
-    </li>
-  </ul>
-
+  <!-- Bootstrap 5 JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
   <script>
-    function getSpecialization(bodyPart) {
-      const map = {
-        brain: "neurosurgery",
-        heart: "cardiology",
-        eye: "ophthalmology",
-        stomach: "gastroenterology",
-        skin: "dermatology",
-        lung: "pulmonology",
-        kidney: "nephrology",
-        liver: "hepatology",
-        teeth: "dentistry",
-        bone: "orthopedics",
-        nose: "ENT",
-        throat: "ENT",
-        blood: "hematology"
-      };
-      return map[bodyPart.toLowerCase()] || "general medicine";
-    }
-
-    function formatResponse(text) {
-      const lines = text.split(/[\.\n]/).filter(line => line.trim().length > 0);
-      return lines.map(line => `<li>🩺 ${line.trim()}</li>`).join('');
-    }
-
-    async function data() {
-      const myList = document.getElementById("myList");
-      const body_part = document.getElementById("body_part").value.trim().toLowerCase();
-      const spinner = document.getElementById("spinner");
-
-      myList.innerHTML = "<li><h1>DISEASES:</h1></li>";
-
-      if (!body_part) {
-        alert("Please enter a body part.");
-        return;
+    // Sample disease data
+    const diseaseData = {
+      brain: {
+        title: "Common Brain-Related Conditions",
+        content: `
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Migraines and headaches</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Epilepsy and seizure disorders</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Stroke and transient ischemic attack (TIA)</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Alzheimer's disease and dementia</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Parkinson's disease</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Multiple sclerosis</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Brain tumors</li>
+          </ul>
+          <div class="alert alert-info mt-3">
+            <i class="fas fa-info-circle me-2"></i> For any neurological symptoms, please consult a neurologist.
+          </div>
+        `
+      },
+      heart: {
+        title: "Common Heart-Related Conditions",
+        content: `
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Coronary artery disease</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Heart attack (myocardial infarction)</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Arrhythmias (irregular heartbeats)</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Heart failure</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>High blood pressure (hypertension)</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Congenital heart defects</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Cardiomyopathy</li>
+          </ul>
+          <div class="alert alert-info mt-3">
+            <i class="fas fa-info-circle me-2"></i> Regular heart checkups are recommended after age 40.
+          </div>
+        `
+      },
+      lungs: {
+        title: "Common Lung-Related Conditions",
+        content: `
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Asthma</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Chronic obstructive pulmonary disease (COPD)</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Pneumonia</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Lung cancer</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Pulmonary embolism</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Tuberculosis</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Pulmonary fibrosis</li>
+          </ul>
+          <div class="alert alert-info mt-3">
+            <i class="fas fa-info-circle me-2"></i> If you experience persistent coughing or breathing difficulties, consult a pulmonologist.
+          </div>
+        `
+      },
+      stomach: {
+        title: "Common Stomach-Related Conditions",
+        content: `
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Gastroesophageal reflux disease (GERD)</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Peptic ulcers</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Gastritis</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Irritable bowel syndrome (IBS)</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Inflammatory bowel disease (Crohn's, colitis)</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Celiac disease</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Stomach cancer</li>
+          </ul>
+          <div class="alert alert-info mt-3">
+            <i class="fas fa-info-circle me-2"></i> Persistent digestive issues should be evaluated by a gastroenterologist.
+          </div>
+        `
       }
+    };
 
-      const specialization = getSpecialization(body_part);
-      const message = `What diseases are related to the ${body_part}?`;
-
-      // Show loading spinner
-      spinner.style.display = "block";
-
-      try {
-        const response = await fetch("https://ai-doctor-api-ai-medical-chatbot-healthcare-ai-assistant.p.rapidapi.com/chat?noqueue=1", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-rapidapi-host": "ai-doctor-api-ai-medical-chatbot-healthcare-ai-assistant.p.rapidapi.com",
-            "x-rapidapi-key": "017118149bmshc01c294606b9939p1704f8jsn273ee77e52df"
-          },
-          body: JSON.stringify({
-            message: message,
-            specialization: specialization,
-            language: "english"
-          })
-        });
-
-        const data = await response.json();
-
-        const responseText = formatResponse(data.response);
-        myList.innerHTML += responseText;
-
-      } catch (error) {
-        console.error(error);
-        const li = document.createElement("LI");
-        li.innerText = "An error occurred while fetching data. Please try again.";
-        myList.appendChild(li);
-      } finally {
-        spinner.style.display = "none";
+    function showDiseaseInfo(bodyPart) {
+      const infoSection = document.getElementById('diseaseInfo');
+      const titleElement = document.getElementById('diseaseTitle');
+      const contentElement = document.getElementById('diseaseContent');
+      
+      if (diseaseData[bodyPart]) {
+        titleElement.textContent = diseaseData[bodyPart].title;
+        contentElement.innerHTML = diseaseData[bodyPart].content;
+        infoSection.style.display = 'block';
+        
+        // Scroll to the info section
+        infoSection.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        titleElement.textContent = "Information Not Available";
+        contentElement.innerHTML = `
+          <div class="alert alert-warning">
+            Detailed information about this body system is not currently available. 
+            Our AI-powered medical assistant (coming soon) will be able to provide 
+            comprehensive information about all body systems and their related conditions.
+          </div>
+        `;
+        infoSection.style.display = 'block';
       }
     }
+
+    // Show brain info by default
+    document.addEventListener('DOMContentLoaded', function() {
+      showDiseaseInfo('brain');
+    });
   </script>
 </body>
-
 </html>
