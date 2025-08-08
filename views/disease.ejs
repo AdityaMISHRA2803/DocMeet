@@ -16,6 +16,61 @@
     body {
       font-family: 'Poppins', sans-serif;
       background-color: #f8f9fa;
+    }
+    
+    .navigation {
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100%;
+      background: linear-gradient(19deg, rgb(28, 117, 250), rgb(34, 2, 159));
+      width: 80px;
+      overflow: hidden;
+      transition: width 0.5s;
+      z-index: 1000;
+    }
+    
+    .navigation:hover {
+      width: 250px;
+    }
+    
+    .navigation ul {
+      padding-left: 0;
+      margin-top: 20px;
+    }
+    
+    .navigation li {
+      list-style: none;
+      width: 100%;
+    }
+    
+    .navigation li a {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: white;
+      padding: 15px 20px;
+      white-space: nowrap;
+    }
+    
+    .navigation li a:hover, .navigation li.active a {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .navigation li a .icon {
+      font-size: 1.5rem;
+      min-width: 50px;
+      display: inline-flex;
+      justify-content: center;
+    }
+    
+    .navigation li a .title {
+      margin-left: 10px;
+    }
+    
+    .main-content {
+      margin-left: 80px;
+      transition: margin-left 0.5s;
       padding: 20px;
     }
     
@@ -77,93 +132,233 @@
       margin-bottom: 15px;
       color: #2956d3;
     }
+    
+    .search-container {
+      margin-bottom: 30px;
+    }
+    
+    .symptom-checker {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+    
+    @media (max-width: 768px) {
+      .navigation {
+        width: 100%;
+        height: 60px;
+      }
+      
+      .navigation:hover {
+        height: auto;
+      }
+      
+      .main-content {
+        margin-left: 0;
+        padding-top: 80px;
+      }
+    }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <!-- Header Section -->
-    <div class="header text-center mb-5">
-      <h1><i class="fas fa-heartbeat me-2"></i> Health Information Center</h1>
-      <p class="mb-0">Explore medical information about common diseases and body systems</p>
-    </div>
-    
-    <!-- Coming Soon Notice -->
-    <div class="alert alert-info mb-4">
-      <i class="fas fa-info-circle me-2"></i>
-      <strong>Note:</strong> The AI-powered disease detection feature is currently under development and will be available soon.
-    </div>
-    
-    <!-- Body Parts Selection -->
-    <div class="row mb-4">
-      <div class="col-12">
-        <h3 class="mb-3"><i class="fas fa-search me-2"></i>Select a Body Part</h3>
-        <div class="row g-3">
-          <div class="col-md-3 col-6">
-            <div class="card body-part-card text-center p-3" onclick="showDiseaseInfo('brain')">
-              <i class="fas fa-brain info-icon"></i>
-              <h5>Brain</h5>
-            </div>
-          </div>
-          <div class="col-md-3 col-6">
-            <div class="card body-part-card text-center p-3" onclick="showDiseaseInfo('heart')">
-              <i class="fas fa-heart info-icon"></i>
-              <h5>Heart</h5>
-            </div>
-          </div>
-          <div class="col-md-3 col-6">
-            <div class="card body-part-card text-center p-3" onclick="showDiseaseInfo('lungs')">
-              <i class="fas fa-lungs info-icon"></i>
-              <h5>Lungs</h5>
-            </div>
-          </div>
-          <div class="col-md-3 col-6">
-            <div class="card body-part-card text-center p-3" onclick="showDiseaseInfo('stomach')">
-              <i class="fas fa-stomach info-icon"></i>
-              <h5>Stomach</h5>
-            </div>
-          </div>
+  <!-- Navigation Bar -->
+  <div class="navigation">
+    <ul>
+      <li class="list">
+        <a href="/dashboard">
+          <span class="icon"><i class="fas fa-home"></i></span>
+          <span class="title">Dashboard</span>
+        </a>
+      </li>
+      <li class="list">
+        <a href="/appointment">
+          <span class="icon"><i class="fas fa-calendar-check"></i></span>
+          <span class="title">Appointment</span>
+        </a>
+      </li>
+      <li class="list active">
+        <a href="/disease">
+          <span class="icon"><i class="fas fa-search-plus"></i></span>
+          <span class="title">Search Disease</span>
+        </a>
+      </li>
+      <li class="list">
+        <a href="/calorie_tracker">
+          <span class="icon"><i class="fas fa-utensils"></i></span>
+          <span class="title">Diet Tracker</span>
+        </a>
+      </li>
+      <li class="list">
+        <a href="/profile">
+          <span class="icon"><i class="fas fa-user-cog"></i></span>
+          <span class="title">Edit Profile</span>
+        </a>
+      </li>
+      <li class="list">
+        <a href="#">
+          <span class="icon"><i class="far fa-question-circle"></i></span>
+          <span class="title">Help</span>
+        </a>
+      </li>
+      <li class="list">
+        <a href="/auth/logout">
+          <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
+          <span class="title">Sign Out</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="main-content">
+    <div class="container">
+      <!-- Header Section -->
+      <div class="header text-center mb-5">
+        <h1><i class="fas fa-heartbeat me-2"></i> Health Information Center</h1>
+        <p class="mb-0">Explore medical information about common diseases and body systems</p>
+      </div>
+      
+      <!-- Coming Soon Notice -->
+      <div class="alert alert-info mb-4">
+        <i class="fas fa-info-circle me-2"></i>
+        <strong>Note:</strong> The AI-powered disease detection feature is currently under development and will be available soon.
+      </div>
+      
+      <!-- Search Functionality -->
+      <div class="search-container">
+        <div class="input-group mb-3">
+          <input type="text" id="diseaseSearch" class="form-control" placeholder="Search for diseases or symptoms...">
+          <button class="btn btn-primary" type="button" id="searchButton">
+            <i class="fas fa-search"></i> Search
+          </button>
         </div>
       </div>
-    </div>
-    
-    <!-- Disease Information Display -->
-    <div id="diseaseInfo" class="disease-info" style="display: none;">
-      <h3 id="diseaseTitle" class="mb-4"></h3>
-      <div id="diseaseContent"></div>
-    </div>
-    
-    <!-- Health Features Section -->
-    <div class="row mt-5">
-      <div class="col-md-4 mb-4">
-        <div class="card feature-card h-100">
-          <div class="card-body">
-            <i class="fas fa-book-medical fa-3x mb-3 text-primary"></i>
-            <h4>Health Encyclopedia</h4>
-            <p>Browse our comprehensive health encyclopedia with information on symptoms, causes, and treatments for hundreds of medical conditions.</p>
-            <button class="btn btn-outline-primary">Explore</button>
+      
+      <!-- Body Parts Selection -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <h3 class="mb-3"><i class="fas fa-search me-2"></i>Select a Body Part</h3>
+          <div class="row g-3">
+            <div class="col-md-3 col-6">
+              <div class="card body-part-card text-center p-3" onclick="showDiseaseInfo('brain')">
+                <i class="fas fa-brain info-icon"></i>
+                <h5>Brain</h5>
+              </div>
+            </div>
+            <div class="col-md-3 col-6">
+              <div class="card body-part-card text-center p-3" onclick="showDiseaseInfo('heart')">
+                <i class="fas fa-heart info-icon"></i>
+                <h5>Heart</h5>
+              </div>
+            </div>
+            <div class="col-md-3 col-6">
+              <div class="card body-part-card text-center p-3" onclick="showDiseaseInfo('lungs')">
+                <i class="fas fa-lungs info-icon"></i>
+                <h5>Lungs</h5>
+              </div>
+            </div>
+            <div class="col-md-3 col-6">
+              <div class="card body-part-card text-center p-3" onclick="showDiseaseInfo('stomach')">
+                <i class="fas fa-stomach info-icon"></i>
+                <h5>Stomach</h5>
+              </div>
+            </div>
+            <div class="col-md-3 col-6">
+              <div class="card body-part-card text-center p-3" onclick="showDiseaseInfo('liver')">
+                <i class="fas fa-leaf info-icon"></i>
+                <h5>Liver</h5>
+              </div>
+            </div>
+            <div class="col-md-3 col-6">
+              <div class="card body-part-card text-center p-3" onclick="showDiseaseInfo('kidney')">
+                <i class="fas fa-filter info-icon"></i>
+                <h5>Kidney</h5>
+              </div>
+            </div>
+            <div class="col-md-3 col-6">
+              <div class="card body-part-card text-center p-3" onclick="showDiseaseInfo('skin')">
+                <i class="fas fa-spa info-icon"></i>
+                <h5>Skin</h5>
+              </div>
+            </div>
+            <div class="col-md-3 col-6">
+              <div class="card body-part-card text-center p-3" onclick="showDiseaseInfo('bones')">
+                <i class="fas fa-bone info-icon"></i>
+                <h5>Bones</h5>
+              </div>
+            </div>
           </div>
         </div>
       </div>
       
-      <div class="col-md-4 mb-4">
-        <div class="card feature-card coming-soon h-100">
-          <div class="card-body">
-            <i class="fas fa-robot fa-3x mb-3 text-primary"></i>
-            <h4>AI Symptom Checker</h4>
-            <p>Our advanced AI will help you understand possible causes for your symptoms (Coming Soon).</p>
-            <button class="btn btn-outline-secondary" disabled>Coming Soon</button>
+      <!-- Disease Information Display -->
+      <div id="diseaseInfo" class="disease-info">
+        <h3 id="diseaseTitle" class="mb-4">Common Brain-Related Conditions</h3>
+        <div id="diseaseContent">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Migraines and headaches</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Epilepsy and seizure disorders</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Stroke and transient ischemic attack (TIA)</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Alzheimer's disease and dementia</li>
+          </ul>
+          <div class="alert alert-info mt-3">
+            <i class="fas fa-info-circle me-2"></i> For any neurological symptoms, please consult a neurologist.
           </div>
         </div>
       </div>
       
-      <div class="col-md-4 mb-4">
-        <div class="card feature-card h-100">
-          <div class="card-body">
-            <i class="fas fa-hospital-user fa-3x mb-3 text-primary"></i>
-            <h4>Find Specialists</h4>
-            <p>Connect with qualified medical specialists in your area based on your health concerns.</p>
-            <button class="btn btn-outline-primary">Find Doctors</button>
+      <!-- Symptom Checker -->
+      <div class="symptom-checker">
+        <h3 class="mb-4"><i class="fas fa-clipboard-list me-2"></i>Symptom Checker</h3>
+        <div class="mb-3">
+          <label for="symptomsInput" class="form-label">Enter your symptoms (comma separated):</label>
+          <textarea class="form-control" id="symptomsInput" rows="3" placeholder="e.g. headache, fever, nausea"></textarea>
+        </div>
+        <button class="btn btn-primary" id="analyzeSymptoms">Analyze Symptoms</button>
+        <div id="symptomResults" class="mt-3" style="display: none;">
+          <h5>Possible Conditions:</h5>
+          <ul class="list-group" id="possibleConditions">
+            <!-- Results will be populated here -->
+          </ul>
+          <div class="alert alert-warning mt-3">
+            <i class="fas fa-exclamation-triangle me-2"></i> This is not a medical diagnosis. Please consult a healthcare professional for accurate assessment.
+          </div>
+        </div>
+      </div>
+      
+      <!-- Health Features Section -->
+      <div class="row mt-5">
+        <div class="col-md-4 mb-4">
+          <div class="card feature-card h-100">
+            <div class="card-body">
+              <i class="fas fa-book-medical fa-3x mb-3 text-primary"></i>
+              <h4>Health Encyclopedia</h4>
+              <p>Browse our comprehensive health encyclopedia with information on symptoms, causes, and treatments for hundreds of medical conditions.</p>
+              <button class="btn btn-outline-primary" onclick="showHealthTips()">Health Tips</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+          <div class="card feature-card coming-soon h-100">
+            <div class="card-body">
+              <i class="fas fa-robot fa-3x mb-3 text-primary"></i>
+              <h4>AI Symptom Checker</h4>
+              <p>Our advanced AI will help you understand possible causes for your symptoms (Coming Soon).</p>
+              <button class="btn btn-outline-secondary" disabled>Coming Soon</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+          <div class="card feature-card h-100">
+            <div class="card-body">
+              <i class="fas fa-hospital-user fa-3x mb-3 text-primary"></i>
+              <h4>Find Specialists</h4>
+              <p>Connect with qualified medical specialists in your area based on your health concerns.</p>
+              <button class="btn btn-outline-primary" onclick="showSpecialists()">Find Doctors</button>
+            </div>
           </div>
         </div>
       </div>
@@ -243,7 +438,81 @@
             <i class="fas fa-info-circle me-2"></i> Persistent digestive issues should be evaluated by a gastroenterologist.
           </div>
         `
+      },
+      liver: {
+        title: "Common Liver-Related Conditions",
+        content: `
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Hepatitis (A, B, C)</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Cirrhosis</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Fatty liver disease</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Liver cancer</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Jaundice</li>
+          </ul>
+          <div class="alert alert-info mt-3">
+            <i class="fas fa-info-circle me-2"></i> Liver function tests are recommended for those with risk factors.
+          </div>
+        `
+      },
+      kidney: {
+        title: "Common Kidney-Related Conditions",
+        content: `
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Kidney stones</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Chronic kidney disease</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Kidney infections</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Polycystic kidney disease</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Kidney failure</li>
+          </ul>
+          <div class="alert alert-info mt-3">
+            <i class="fas fa-info-circle me-2"></i> Regular checkups are important for those with diabetes or high blood pressure.
+          </div>
+        `
+      },
+      skin: {
+        title: "Common Skin Conditions",
+        content: `
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Acne</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Eczema</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Psoriasis</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Skin cancer</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Rosacea</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Hives</li>
+          </ul>
+          <div class="alert alert-info mt-3">
+            <i class="fas fa-info-circle me-2"></i> Protect your skin from excessive sun exposure to prevent damage.
+          </div>
+        `
+      },
+      bones: {
+        title: "Common Bone-Related Conditions",
+        content: `
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Osteoporosis</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Arthritis</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Osteoarthritis</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Rheumatoid arthritis</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Fractures</li>
+            <li class="list-group-item"><i class="fas fa-arrow-right me-2 text-primary"></i>Osteopenia</li>
+          </ul>
+          <div class="alert alert-info mt-3">
+            <i class="fas fa-info-circle me-2"></i> Calcium and vitamin D are essential for bone health.
+          </div>
+        `
       }
+    };
+
+    // Symptom to condition mapping
+    const symptomMap = {
+      headache: ["Migraine", "Tension headache", "Sinusitis", "Hypertension"],
+      fever: ["Flu", "Common cold", "COVID-19", "Urinary tract infection"],
+      nausea: ["Food poisoning", "Migraine", "Gastroenteritis", "Pregnancy"],
+      cough: ["Common cold", "Flu", "COVID-19", "Bronchitis"],
+      fatigue: ["Anemia", "Hypothyroidism", "Chronic fatigue syndrome", "Depression"],
+      "chest pain": ["Heartburn", "Angina", "Panic attack", "Pneumonia"],
+      dizziness: ["Low blood pressure", "Vertigo", "Anemia", "Dehydration"],
+      "joint pain": ["Arthritis", "Lupus", "Fibromyalgia", "Bursitis"]
     };
 
     function showDiseaseInfo(bodyPart) {
@@ -271,9 +540,130 @@
       }
     }
 
-    // Show brain info by default
+    function analyzeSymptoms() {
+      const symptomsInput = document.getElementById('symptomsInput').value.toLowerCase();
+      if (!symptomsInput) {
+        alert("Please enter at least one symptom");
+        return;
+      }
+      
+      const symptoms = symptomsInput.split(',').map(s => s.trim());
+      const possibleConditions = new Set();
+      
+      symptoms.forEach(symptom => {
+        if (symptomMap[symptom]) {
+          symptomMap[symptom].forEach(condition => possibleConditions.add(condition));
+        }
+      });
+      
+      const resultsContainer = document.getElementById('possibleConditions');
+      resultsContainer.innerHTML = '';
+      
+      if (possibleConditions.size > 0) {
+        possibleConditions.forEach(condition => {
+          const li = document.createElement('li');
+          li.className = 'list-group-item';
+          li.textContent = condition;
+          resultsContainer.appendChild(li);
+        });
+      } else {
+        const li = document.createElement('li');
+        li.className = 'list-group-item';
+        li.textContent = 'No specific conditions identified based on these symptoms';
+        resultsContainer.appendChild(li);
+      }
+      
+      document.getElementById('symptomResults').style.display = 'block';
+    }
+
+    function showHealthTips() {
+      const randomTips = [
+        "Drink at least 8 glasses of water daily",
+        "Get 7-8 hours of sleep each night",
+        "Exercise for at least 30 minutes most days",
+        "Eat a balanced diet with plenty of fruits and vegetables",
+        "Limit processed foods and added sugars",
+        "Manage stress through meditation or relaxation techniques",
+        "Don't smoke and limit alcohol consumption",
+        "Wash your hands regularly to prevent infections"
+      ];
+      
+      alert("Health Tip: " + randomTips[Math.floor(Math.random() * randomTips.length)]);
+    }
+
+    function showSpecialists() {
+      const specialists = {
+        "Neurologist": "Brain and nervous system disorders",
+        "Cardiologist": "Heart and cardiovascular conditions",
+        "Pulmonologist": "Lung and respiratory issues",
+        "Gastroenterologist": "Digestive system problems",
+        "Dermatologist": "Skin conditions",
+        "Orthopedist": "Bone and joint issues",
+        "Endocrinologist": "Hormonal disorders",
+        "Nephrologist": "Kidney diseases"
+      };
+      
+      let message = "Medical Specialists:\n\n";
+      for (const [specialist, description] of Object.entries(specialists)) {
+        message += `${specialist}: ${description}\n\n`;
+      }
+      
+      alert(message);
+    }
+
+    function searchDiseases() {
+      const searchTerm = document.getElementById('diseaseSearch').value.toLowerCase();
+      if (!searchTerm) {
+        alert("Please enter a search term");
+        return;
+      }
+      
+      let found = false;
+      for (const [bodyPart, data] of Object.entries(diseaseData)) {
+        const content = data.content.toLowerCase();
+        if (content.includes(searchTerm)) {
+          showDiseaseInfo(bodyPart);
+          found = true;
+          break;
+        }
+      }
+      
+      if (!found) {
+        alert("No diseases found matching your search. Try a different term.");
+      }
+    }
+
+    // Initialize the page
     document.addEventListener('DOMContentLoaded', function() {
+      // Set up event listeners
+      document.getElementById('analyzeSymptoms').addEventListener('click', analyzeSymptoms);
+      document.getElementById('searchButton').addEventListener('click', searchDiseases);
+      
+      // Show brain info by default
       showDiseaseInfo('brain');
+      
+      // Initialize navigation active state
+      const list = document.querySelectorAll(".list");
+      
+      function activateNavItem() {
+        list.forEach((item) => {
+          item.classList.remove("active");
+          this.classList.add("active");
+        });
+      }
+      
+      list.forEach((item) => {
+        item.addEventListener("mouseover", activateNavItem);
+      });
+      
+      // Set current page as active
+      const currentPage = window.location.pathname;
+      list.forEach(item => {
+        const link = item.querySelector('a');
+        if (link.getAttribute('href') === currentPage) {
+          item.classList.add('active');
+        }
+      });
     });
   </script>
 </body>
