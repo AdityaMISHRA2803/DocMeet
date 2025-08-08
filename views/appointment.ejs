@@ -68,6 +68,11 @@
       font-weight: bold;
     }
     
+    .calendar-table td.selected {
+      background: #2956d3;
+      color: white;
+    }
+    
     .appointment-form {
       background: white;
       border-radius: 10px;
@@ -219,10 +224,10 @@
               <div class="row g-3">
                 <div class="col-md-6">
                   <label class="form-label required">Date</label>
-                  <input class="form-control date-input" name="date" id="date" required
+                  <input class="form-control date-input" name="date" id="date" required readonly
                     data-bs-toggle="popover" data-bs-trigger="hover" 
                     data-bs-title="Date" 
-                    data-bs-content="You can select any date from today clicking on the number in the calendar">
+                    data-bs-content="Select a date from the calendar above">
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Description of problem</label>
@@ -231,11 +236,11 @@
                 
                 <div class="col-md-6">
                   <label class="form-label required">Start Time</label>
-                  <input class="form-control time-input" type="text" name="start_time" id="start_time" required>
+                  <input class="form-control time-input" type="time" name="start_time" id="start_time" required>
                 </div>
                 <div class="col-md-6">
                   <label class="form-label required">End Time</label>
-                  <input class="form-control time-input" type="text" id="end_time" name="end_time" required>
+                  <input class="form-control time-input" type="time" id="end_time" name="end_time" required>
                 </div>
                 
                 <div class="col-md-6 mt-3">
@@ -312,8 +317,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
   <!-- IziToast -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
-  <!-- Appointment Script -->
-  <script src="/Appointment.js"></script>
+  
   <script>
     // Initialize popovers
     const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
@@ -324,6 +328,82 @@
     function Delete(x) {
       x.closest('tr').remove();
     }
+
+    // Calendar functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const monthElement = document.getElementById('month');
+      const yearElement = document.getElementById('year');
+      const daysElement = document.getElementById('days');
+      const dateInput = document.getElementById('date');
+      
+      const months = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ];
+      
+      const date = new Date();
+      let currentMonth = date.getMonth();
+      let currentYear = date.getFullYear();
+      
+      function renderCalendar() {
+        date.setDate(1);
+        
+        const firstDayIndex = date.getDay();
+        const lastDay = new Date(currentYear, currentMonth + 1, 0).getDate();
+        const prevLastDay = new Date(currentYear, currentMonth, 0).getDate();
+        const lastDayIndex = new Date(currentYear, currentMonth + 1, 0).getDay();
+        const nextDays = 7 - lastDayIndex - 1;
+        
+        monthElement.textContent = months[currentMonth];
+        yearElement.textContent = currentYear;
+        
+        let days = "";
+        
+        // Previous month days
+        for (let x = firstDayIndex; x > 0; x--) {
+          days += `<td class="text-muted">${prevLastDay - x + 1}</td>`;
+        }
+        
+        // Current month days
+        const today = new Date();
+        for (let i = 1; i <= lastDay; i++) {
+          const isToday = 
+            i === today.getDate() && 
+            currentMonth === today.getMonth() && 
+            currentYear === today.getFullYear();
+            
+          const dayClass = isToday ? 'today' : '';
+          days += `<td class="${dayClass}" onclick="selectDate(this, ${i})">${i}</td>`;
+        }
+        
+        // Next month days
+        for (let j = 1; j <= nextDays; j++) {
+          days += `<td class="text-muted">${j}</td>`;
+        }
+        
+        daysElement.innerHTML = days;
+      }
+      
+      window.selectDate = function(element, day) {
+        // Remove selected class from all cells
+        document.querySelectorAll('#days td').forEach(cell => {
+          cell.classList.remove('selected');
+        });
+        
+        // Add selected class to clicked cell
+        element.classList.add('selected');
+        
+        // Format date as YYYY-MM-DD
+        const formattedMonth = (currentMonth + 1).toString().padStart(2, '0');
+        const formattedDay = day.toString().padStart(2, '0');
+        const selectedDate = `${currentYear}-${formattedMonth}-${formattedDay}`;
+        
+        // Set the date input value
+        dateInput.value = selectedDate;
+      }
+      
+      renderCalendar();
+    });
   </script>
 </body>
 
