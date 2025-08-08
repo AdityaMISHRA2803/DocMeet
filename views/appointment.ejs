@@ -9,6 +9,8 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- iziToast CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
   <title>Appointment</title>
   <style>
     body {
@@ -72,12 +74,52 @@
       padding: 20px;
     }
     
+    .calendar-header {
+      background-color: #2956d3;
+      color: white;
+      padding: 15px;
+      border-radius: 8px 8px 0 0;
+    }
+    
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 1px;
+      background-color: #e9ecef;
+    }
+    
+    .calendar-day {
+      padding: 10px;
+      text-align: center;
+      background-color: white;
+      min-height: 40px;
+      cursor: pointer;
+    }
+    
+    .calendar-day:hover {
+      background-color: #f1f1f1;
+    }
+    
+    .calendar-day.today {
+      background-color: #2956d3;
+      color: white;
+      font-weight: bold;
+    }
+    
+    .calendar-day.other-month {
+      color: #adb5bd;
+    }
+    
+    .weekdays {
+      background-color: #343a40;
+      color: white;
+    }
+    
     .appointment-form {
       background-color: white;
       border-radius: 8px;
       padding: 20px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
     }
     
     .form-label {
@@ -87,6 +129,21 @@
     .required:after {
       content: " *";
       color: red;
+    }
+    
+    .badge1::after {
+      content: attr(data-badge);
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: #dc3545;
+      color: white;
+      width: 20px;
+      height: 20px;
+      text-align: center;
+      line-height: 20px;
+      border-radius: 50%;
+      font-size: 12px;
     }
     
     @media (max-width: 768px) {
@@ -157,35 +214,57 @@
 
   <div class="main-content">
     <div class="container">
-      <h2 class="mb-4">Appointment</h2>
+      <h2 class="mb-4">Appointment Scheduling</h2>
+      
+      <!-- Calendar Section -->
+      <div class="card mb-4 border-0 shadow-sm">
+        <div class="calendar-header">
+          <h4 class="mb-0 text-center" id="month-year">August 2025</h4>
+        </div>
+        <div class="calendar-grid">
+          <!-- Weekday headers -->
+          <div class="weekdays p-2 text-center">Sun</div>
+          <div class="weekdays p-2 text-center">Mon</div>
+          <div class="weekdays p-2 text-center">Tue</div>
+          <div class="weekdays p-2 text-center">Wed</div>
+          <div class="weekdays p-2 text-center">Thu</div>
+          <div class="weekdays p-2 text-center">Fri</div>
+          <div class="weekdays p-2 text-center">Sat</div>
+          
+          <!-- Calendar days will be populated by appointment.js -->
+          <tbody class="days bg-light" id="days"></tbody>
+        </div>
+      </div>
+      
+      <p class="text-muted mb-4">The appointments are for the current month only</p>
       
       <!-- Appointment Form -->
       <div class="row">
         <div class="col-lg-6">
-          <div class="appointment-form">
+          <div class="appointment-form mb-4">
             <h4 class="mb-4">New Appointment</h4>
             <form id="form_create_appointment" method="POST" action="/appointment">
               <div class="mb-3">
                 <label for="date" class="form-label required">Date</label>
-                <input type="date" class="form-control" id="date" name="date" required>
+                <input type="text" class="form-control date-input" name="date" id="date" required>
               </div>
               <div class="mb-3">
                 <label for="description" class="form-label">Description</label>
-                <input type="text" class="form-control" id="description" name="description" placeholder="e.g. fever">
+                <input type="text" class="form-control" id="description" name="description" placeholder="Brief description of your appointment">
               </div>
               <div class="row mb-3">
                 <div class="col-md-6">
                   <label for="start_time" class="form-label required">Start Time</label>
-                  <input type="time" class="form-control" id="start_time" name="start_time" required>
+                  <input type="text" class="form-control time-input" name="start_time" id="start_time" required>
                 </div>
                 <div class="col-md-6">
                   <label for="end_time" class="form-label required">End Time</label>
-                  <input type="time" class="form-control" id="end_time" name="end_time" required>
+                  <input type="text" class="form-control time-input" id="end_time" name="end_time" required>
                 </div>
               </div>
               <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                 <button type="reset" class="btn btn-outline-secondary me-md-2">Reset Form</button>
-                <button type="submit" class="btn btn-primary">Book Appointment</button>
+                <button type="submit" class="btn btn-primary" id="submit">Book Appointment</button>
               </div>
             </form>
           </div>
@@ -197,24 +276,26 @@
             <div class="card-body">
               <h4 class="mb-4">Your Appointments</h4>
               <div class="table-responsive">
-                <table class="table table-hover">
+                <table class="table table-hover" id="appointment_list">
                   <thead class="table-light">
                     <tr>
-                      <th>Date</th>
-                      <th>Description</th>
-                      <th>Time</th>
-                      <th>Action</th>
+                      <th class="text-center">Date</th>
+                      <th class="text-center">Description</th>
+                      <th class="text-center">Start Time</th>
+                      <th class="text-center">End Time</th>
+                      <th class="text-center">Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     <%if(appointments.length> 0) {%>
                       <% for(var i=0;i<appointments.length;i++) { %>
                         <tr>
-                          <td><%= appointments[i].date %></td>
-                          <td><%= appointments[i].description %></td>
-                          <td><%= appointments[i].start_time %> - <%= appointments[i].end_time %></td>
-                          <td>
-                            <button class="btn btn-sm btn-outline-danger" onclick="Delete(this)">
+                          <td class="text-center"><%= appointments[i].date %></td>
+                          <td class="text-center"><%= appointments[i].description %></td>
+                          <td class="text-center"><%= appointments[i].start_time %></td>
+                          <td class="text-center"><%= appointments[i].end_time %></td>
+                          <td class="text-center">
+                            <button class="btn btn-danger btn-sm" onclick="delete_appointment('<%= appointments[i].id %>')">
                               <i class="fas fa-trash"></i>
                             </button>
                           </td>
@@ -222,14 +303,14 @@
                       <% } %>
                     <% } else { %>
                       <tr>
-                        <td colspan="4" class="text-center text-muted py-3">No appointments scheduled</td>
+                        <td colspan="5" class="text-center text-muted py-3">No appointments scheduled</td>
                       </tr>
                     <% } %>
                   </tbody>
                 </table>
               </div>
               <div class="d-grid mt-3">
-                <button class="btn btn-outline-danger" onclick="clear_storage()">
+                <button class="btn btn-outline-danger" id="btn_clear_storage" onclick="clear_storage()">
                   Clear All Appointments
                 </button>
               </div>
@@ -240,62 +321,44 @@
     </div>
   </div>
 
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <!-- Bootstrap 5 JS Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Inputmask -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+  <!-- iziToast JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
+  
+  <!-- Your existing scripts -->
+  <script src="/appointment.js"></script>
+  <script src="/navigation.js"></script>
   
   <script>
-    function Delete(btn) {
-      if (confirm('Are you sure you want to delete this appointment?')) {
-        btn.closest('tr').remove();
-      }
-    }
-    
-    // Set default date to today
+    // Initialize navigation active state
     document.addEventListener('DOMContentLoaded', function() {
-      const today = new Date().toISOString().split('T')[0];
-      document.getElementById('date').value = today;
+      const list = document.querySelectorAll(".list");
       
-      // Set default time (current time + 1 hour)
-      const now = new Date();
-      const nextHour = new Date(now.getTime() + 60 * 60 * 1000);
-      
-      document.getElementById('start_time').value = 
-        `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-      
-      document.getElementById('end_time').value = 
-        `${String(nextHour.getHours()).padStart(2, '0')}:${String(nextHour.getMinutes()).padStart(2, '0')}`;
-        
-      // Form submission handler
-      document.getElementById('form_create_appointment').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const formData = new FormData(this);
-        
-        fetch('/appointment', {
-          method: 'POST',
-          body: formData
-        })
-        .then(response => {
-          if (response.ok) {
-            window.location.reload();
-          } else {
-            alert('Failed to create appointment. Please try again.');
-          }
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          alert('An error occurred. Please try again.');
+      function activateNavItem() {
+        list.forEach((item) => {
+          item.classList.remove("active");
+          this.classList.add("active");
         });
+      }
+      
+      list.forEach((item) => {
+        item.addEventListener("mouseover", activateNavItem);
+      });
+      
+      // Set current page as active
+      const currentPage = window.location.pathname;
+      list.forEach(item => {
+        const link = item.querySelector('a');
+        if (link.getAttribute('href') === currentPage) {
+          item.classList.add('active');
+        }
       });
     });
-    
-    function clear_storage() {
-      if (confirm('Are you sure you want to clear all appointments?')) {
-        // Implement your clear all logic here
-        // This should match your original clear_storage() function
-        window.location.reload();
-      }
-    }
   </script>
 </body>
 </html>
