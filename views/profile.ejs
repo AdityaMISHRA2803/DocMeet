@@ -1,217 +1,357 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="../modal_page.css">
-  <link rel="stylesheet" href="../second_navmenu.css">
-  <script src="https://kit.fontawesome.com/d8ab0e903f.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
-    integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
-    integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
-    crossorigin="anonymous"></script>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <title>Profile Page | User</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f9fa;
+    }
+    
+    /* Navigation gradient */
+    .bg-nav-gradient {
+      background: linear-gradient(19deg, rgb(28, 117, 250), rgb(34, 2, 159));
+    }
+    
+    /* Profile specific styles */
+    .user-profile-img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+    }
+    
+    .user-data-card {
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    
+    .data-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .data-item {
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .data-item:last-child {
+      border-bottom: none;
+    }
+    
+    .data-label {
+      font-weight: 600;
+      color: #6c757d;
+    }
+    
+    .data-value {
+      font-weight: 500;
+      color: #212529;
+    }
+    
+    .edit-button {
+      background: linear-gradient(19deg, rgb(28, 117, 250), rgb(34, 2, 159));
+      border: none;
+      padding: 10px 25px;
+      font-weight: 500;
+    }
+    
+    @media (max-width: 768px) {
+      .user-profile-img {
+        width: 120px;
+        height: 120px;
+      }
+    }
+  </style>
 </head>
 
-<body>
+<body class="d-flex">
+  <!-- Mobile Menu Toggle -->
+  <button class="d-lg-none btn btn-primary position-fixed top-3 start-3 z-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
+    <i class="fas fa-bars"></i>
+  </button>
 
-  <!-- navigation -->
-  <div class="navigation">
-    <ul>
-      <li class="list active">
-        <a href="/dashboard">
-          <span class="icon"><i class="fas fa-home"></i></span>
-          <span class="title">Dashboard</span>
-        </a>
-      </li>
-
-      <!-- <li class="list">
-        <a href="#">
-          <span class="icon"><i class="fas fa-hospital"></i></span>
-          <span class="title">Hospitals near me</span>
-        </a>
-      </li> -->
-
-      <li class="list">
-        <a href="/appointment">
-          <span class="icon"><i class="fas fa-calendar-check"></i></span>
-          <span class="title">Appointment</span>
-        </a>
-      </li>
-      <li class="list">
-        <a href="/disease">
-          <span class="icon"><i class="fas fa-search-plus"></i></span>
-          <span class="title">Search Disease</span>
-        </a>
-      </li>
-      <li class="list">
-        <a href="/calorie_tracker">
-          <span class="icon"><i class="fas fa-utensils"></i></span>
-          <span class="title">Diet Tracker</span>
-        </a>
-      </li>
-      <li class="list">
-        <a href="/profile">
-          <span class="icon"><i class="fas fa-user-cog"></i></span>
-          <span class="title">Edit Profile</span>
-        </a>
-      </li>
-      <li class="list">
-        <a href="#">
-          <span class="icon"><i class="far fa-question-circle"></i></span>
-          <span class="title">Help</span>
-        </a>
-      </li>
-      <li class="list">
-        <a href="/auth/logout">
-          <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
-          <span class="title">Sign Out</span>
-        </a>
-      </li>
-    </ul>
+  <!-- Sidebar Navigation -->
+  <div class="offcanvas-lg offcanvas-start bg-nav-gradient text-white vh-100" tabindex="-1" id="sidebar" style="width: 280px;">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title">Menu</h5>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#sidebar"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column px-0">
+      <ul class="nav flex-column">
+        <li class="nav-item rounded-end py-2">
+          <a class="nav-link text-white d-flex align-items-center" href="/dashboard">
+            <i class="fas fa-home fs-5 mx-3"></i>
+            <span class="fs-5">Dashboard</span>
+          </a>
+        </li>
+        
+        <li class="nav-item rounded-end py-2">
+          <a class="nav-link text-white d-flex align-items-center" href="/appointment">
+            <i class="fas fa-calendar-check fs-5 mx-3"></i>
+            <span class="fs-5">Appointment</span>
+          </a>
+        </li>
+        
+        <li class="nav-item rounded-end py-2">
+          <a class="nav-link text-white d-flex align-items-center" href="/disease">
+            <i class="fas fa-search-plus fs-5 mx-3"></i>
+            <span class="fs-5">Search Disease</span>
+          </a>
+        </li>
+        
+        <li class="nav-item rounded-end py-2">
+          <a class="nav-link text-white d-flex align-items-center" href="/calorie_tracker">
+            <i class="fas fa-utensils fs-5 mx-3"></i>
+            <span class="fs-5">Diet Tracker</span>
+          </a>
+        </li>
+        
+        <li class="nav-item active rounded-end py-2">
+          <a class="nav-link text-white d-flex align-items-center" href="/profile">
+            <i class="fas fa-user-cog fs-5 mx-3"></i>
+            <span class="fs-5">Edit Profile</span>
+          </a>
+        </li>
+        
+        <li class="nav-item rounded-end py-2">
+          <a class="nav-link text-white d-flex align-items-center" href="/help">
+            <i class="far fa-question-circle fs-5 mx-3"></i>
+            <span class="fs-5">Help</span>
+          </a>
+        </li>
+        
+        <li class="nav-item rounded-end py-2">
+          <a class="nav-link text-white d-flex align-items-center" href="/auth/logout">
+            <i class="fas fa-sign-out-alt fs-5 mx-3"></i>
+            <span class="fs-5">Sign Out</span>
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
-  <!-- end of navigation -->
 
-
-  <div class="container">
-    <div class="main-body">
-      <div class="row gutters-sm">
-        <div class="col-md-4 mb-3">
-          <div class="card user_area p-5">
-            <div class="card-body">
-              <p class="d-flex flex-column align-items-center text-center" style="font-size: large; font-weight: 700;">
-                My Details</p> <br>
-              <div class="d-flex flex-column align-items-center text-center">
-                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Admin" class="rounded-circle"
-                  width="150">
-                <div style="font-size: smaller;">
-                  <h4>
-                    <%if(userDetails) {%>
-                      <% if( foundUser.displayName) { %>
-                        <p>
-                          <%= foundUser.displayName%>
-                        </p>
-                        <% }%>
-                  </h4>
-                  <h4>
-                    <% if( !userDetails ) { %>
-                      <p>username@gmail.com</p>
-                      <% }else{ %>
-                        <p>
-                          <%= userDetails.mail %>
-                        </p>
-                        <% } %>
-                          <% } %>
-                  </h4>
-                  <button class="btn btn-outline-primary">Message</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card mt-3 users_icon p-4">
-            <img src="/undraw_Profile_re_4a55.png" class="Image_user p-3">
-          </div>
-        </div>
-        <div class="col-md-8">
-          <div class="card mb-3">
-            <form action="/profile" method="POST" class="p-3 w-75 mx-auto">
-              <div class="m-3">
-                <label class="form-label">Name</label>
-                <input type="text" class="form-control" name="Name" autocomplete="off">
-              </div>
-              <div class="m-3">
-                <label class="form-label">Phone</label>
-                <input type="text" class="form-control" name="phone" autocomplete="off">
-              </div>
-              <div class="m-3">
-                <label for="exampleInputEmail1" class="form-label">Email address</label>
-                <input type="email" class="form-control" name="Email1" aria-describedby="emailHelp" autocomplete="off">
-                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-              </div>
-              <div class="m-3">
-                <label class="form-label">Address</label>
-                <textarea class="form-control" name="address" autocomplete="off"></textarea>
-              </div>
-              <!-- gender -->
-              <div class="m-3">
-                <label class="form-label">Gender</label> <br>
-                <input type="radio" id="male" name="gender" value="male">
-                 <label for="male">Male</label>
-                <input type="radio" id="female" name="gender" value="female">
-                 <label for="female">Female</label>
-              </div>
-              <div class="m-3">
-                <label for="Blood_grp" class="form-label">Blood Group</label>
-                <input type="text" class="form-control" name="blood_grp" autocomplete="off">
-              </div>
-              <!-- end of gender -->
-              <div class="m-3">
-                <label for="Weight" class="form-label">Weight</label>
-                <input type="number" class="form-control" name="Weight" autocomplete="off" placeholder="Weight in Kg">
-              </div>
-              <div class="m-3">
-                <label for="Height" class="form-label">Height</label>
-                <input type="number" class="form-control" name="Height" autocomplete="off" placeholder="Height in cm">
-              </div>
-              <button type="submit" class="btn3 btn-primary edit_button m-3">Save Changes</button>
+  <!-- Main Content -->
+  <div class="flex-grow-1 ms-lg-5">
+    <!-- Search Bar -->
+    <div class="search-bar py-3 border-bottom">
+      <div class="container-fluid">
+        <div class="row align-items-center">
+          <div class="col">
+            <form class="d-flex position-relative">
+              <button class="btn position-absolute start-0 top-50 translate-middle-y bg-transparent border-0" type="submit">
+                <i class="fas fa-search text-secondary"></i>
+              </button>
+              <input class="form-control ps-5 border-0 shadow-none" type="search" placeholder="Global Search" aria-label="Search">
             </form>
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-laptop-medical fs-3 text-primary"></i>
           </div>
         </div>
       </div>
-      <div class="task-block">
-        <div class="column1">
-          <p class="user_data">
-            Your Data
-            <br><br>
-          <div class="data">
-            <div class="weight">
-              <%if(userDetails[0]) {%>
-                <span>Weight(in Kg)</span> <br><br><br><br>
-                <%= userDetails[0].weight %>
-            </div>
-            <div class="height">
-              <span>Height(in cm)</span><br><br><br><br>
-              <%= userDetails[0].height %>
-            </div>
-            <div class="bloodgrp">
-              <span>Blood Group</span><br><br><br><br>
-              <%= userDetails[0].bg %>
-            </div>
-            <div class="bmi">
-              <span>BMI</span><br><br><br><br>
-              <%= userDetails[0].BMI %>
-            </div>
-            <div class="bmi_status">
-              <span>Weight Status</span><br><br><br><br>
-              <%if(userDetails[0]) {%>
-                <%if(userDetails[0].BMI<18.5){%>
-                  Underweight
-                  <%} else if(userDetails[0].BMI>=18.5 && userDetails[0].BMI<=24.9){%>
-                      Healthy
-                      <%} else if(userDetails[0].BMI>=25 && userDetails[0].BMI<=29.9){%>
-                          OverWeight
-                          <%} else if(userDetails[0].BMI>=30){%>
-                            Obese
-                            <%}%>
-                              <% } %>
-                                <% } %>
+    </div>
+
+    <!-- Profile Content -->
+    <div class="container-fluid py-4">
+      <div class="row g-4">
+        <!-- Profile Sidebar -->
+        <div class="col-lg-4">
+          <div class="card user-data-card border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+              <h4 class="card-title mb-4">My Details</h4>
+              <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile" class="user-profile-img rounded-circle mb-3">
+              
+              <h4 class="mb-2">
+                <%if(userDetails) {%>
+                  <% if( foundUser.displayName) { %>
+                    <%= foundUser.displayName%>
+                  <% }%>
+                <% } else { %>
+                  username@gmail.com
+                <% } %>
+              </h4>
+              
+              <p class="text-muted mb-3">
+                <% if( userDetails ) { %>
+                  <%= userDetails.mail %>
+                <% } %>
+              </p>
+              
+              <button class="btn btn-outline-primary">Message</button>
             </div>
           </div>
-          </p>
+          
+          <div class="card border-0 shadow-sm">
+            <div class="card-body p-0">
+              <img src="/undraw_Profile_re_4a55.png" class="img-fluid p-4" alt="Profile Illustration">
+            </div>
+          </div>
+        </div>
+        
+        <!-- Profile Form -->
+        <div class="col-lg-8">
+          <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body">
+              <h3 class="card-title mb-4">Edit Profile</h3>
+              
+              <form action="/profile" method="POST" class="w-100">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label">Name</label>
+                    <input type="text" class="form-control" name="Name" autocomplete="off">
+                  </div>
+                  
+                  <div class="col-md-6">
+                    <label class="form-label">Phone</label>
+                    <input type="text" class="form-control" name="phone" autocomplete="off">
+                  </div>
+                  
+                  <div class="col-12">
+                    <label for="exampleInputEmail1" class="form-label">Email address</label>
+                    <input type="email" class="form-control" name="Email1" aria-describedby="emailHelp" autocomplete="off">
+                    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                  </div>
+                  
+                  <div class="col-12">
+                    <label class="form-label">Address</label>
+                    <textarea class="form-control" name="address" rows="3" autocomplete="off"></textarea>
+                  </div>
+                  
+                  <div class="col-md-6">
+                    <label class="form-label">Gender</label>
+                    <div class="d-flex gap-4">
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" id="male" name="gender" value="male">
+                        <label class="form-check-label" for="male">Male</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" id="female" name="gender" value="female">
+                        <label class="form-check-label" for="female">Female</label>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-6">
+                    <label for="Blood_grp" class="form-label">Blood Group</label>
+                    <input type="text" class="form-control" name="blood_grp" autocomplete="off">
+                  </div>
+                  
+                  <div class="col-md-6">
+                    <label for="Weight" class="form-label">Weight</label>
+                    <div class="input-group">
+                      <input type="number" class="form-control" name="Weight" autocomplete="off" placeholder="Weight">
+                      <span class="input-group-text">kg</span>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-6">
+                    <label for="Height" class="form-label">Height</label>
+                    <div class="input-group">
+                      <input type="number" class="form-control" name="Height" autocomplete="off" placeholder="Height">
+                      <span class="input-group-text">cm</span>
+                    </div>
+                  </div>
+                  
+                  <div class="col-12 mt-3">
+                    <button type="submit" class="btn btn-primary edit-button">Save Changes</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- User Data Section -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <h3 class="card-title mb-4">Your Health Data</h3>
+              
+              <%if(userDetails[0]) {%>
+                <div class="row g-4">
+                  <div class="col-md-3">
+                    <div class="data-card">
+                      <div class="data-item">
+                        <div class="data-label">Weight</div>
+                        <div class="data-value"><%= userDetails[0].weight %> kg</div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-3">
+                    <div class="data-card">
+                      <div class="data-item">
+                        <div class="data-label">Height</div>
+                        <div class="data-value"><%= userDetails[0].height %> cm</div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-3">
+                    <div class="data-card">
+                      <div class="data-item">
+                        <div class="data-label">Blood Group</div>
+                        <div class="data-value"><%= userDetails[0].bg %></div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-3">
+                    <div class="data-card">
+                      <div class="data-item">
+                        <div class="data-label">BMI</div>
+                        <div class="data-value"><%= userDetails[0].BMI %></div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="col-12">
+                    <div class="data-card">
+                      <div class="data-item">
+                        <div class="data-label">Weight Status</div>
+                        <div class="data-value">
+                          <%if(userDetails[0].BMI<18.5){%>
+                            Underweight
+                          <%} else if(userDetails[0].BMI>=18.5 && userDetails[0].BMI<=24.9){%>
+                            Healthy
+                          <%} else if(userDetails[0].BMI>=25 && userDetails[0].BMI<=29.9){%>
+                            OverWeight
+                          <%} else if(userDetails[0].BMI>=30){%>
+                            Obese
+                          <%}%>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% } %>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <script src="../navigation.js"></script>
+
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>
