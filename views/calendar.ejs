@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendar</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .calendar-cell {
+        @apply p-2 text-center border border-gray-200;
+      }
+      .calendar-cell:hover {
+        @apply bg-blue-100 cursor-pointer;
+      }
+      .calendar-cell.today {
+        @apply bg-blue-500 text-white font-bold;
+      }
+      .calendar-cell.outside {
+        @apply text-gray-400 opacity-50;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 font-sans">
+
+<div class="container mx-auto p-4">
+  <div id="calendari" class="bg-white rounded-lg shadow-md overflow-hidden max-w-xs sm:max-w-sm md:max-w-md mx-auto"></div>
+</div>
+
+<script>
+// Calendar data
+var months = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+
+var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+var daysShort = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+
+// Pad numbers with leading zeros
+Number.prototype.pad = function(num) {
+  var str = "";
+  for (var i = 0; i < num - this.toString().length; i++) str += "0";
+  return str + this.toString();
+};
+
+function initCalendar(widget, date) {
+  // Clear previous calendar if exists
+  widget.innerHTML = '';
+  
+  // Create calendar container
+  var calendar = document.createElement('div');
+  calendar.className = 'w-full';
+  
+  // Create header with month/year and navigation
+  var header = document.createElement('div');
+  header.className = 'flex items-center justify-between p-4 bg-blue-600 text-white';
+  
+  // Previous month button
+  var prevBtn = document.createElement('button');
+  prevBtn.className = 'p-2 rounded-full hover:bg-blue-700 transition-colors';
+  prevBtn.innerHTML = '&#9666;';
+  prevBtn.onclick = function() {
+    date.setMonth(date.getMonth() - 1);
+    initCalendar(widget, date);
+  };
+  
+  // Month/year display
+  var monthDisplay = document.createElement('div');
+  monthDisplay.className = 'text-lg font-semibold';
+  monthDisplay.innerHTML = months[date.getMonth()] + ' <span class="text-sm font-normal">' + date.getFullYear() + '</span>';
+  
+  // Next month button
+  var nextBtn = document.createElement('button');
+  nextBtn.className = 'p-2 rounded-full hover:bg-blue-700 transition-colors';
+  nextBtn.innerHTML = '&#9656;';
+  nextBtn.onclick = function() {
+    date.setMonth(date.getMonth() + 1);
+    initCalendar(widget, date);
+  };
+  
+  header.appendChild(prevBtn);
+  header.appendChild(monthDisplay);
+  header.appendChild(nextBtn);
+  calendar.appendChild(header);
+  
+  // Create days of week header
+  var daysRow = document.createElement('div');
+  daysRow.className = 'grid grid-cols-7 bg-blue-100 text-blue-800 font-medium';
+  
+  daysShort.forEach(function(day) {
+    var dayCell = document.createElement('div');
+    dayCell.className = 'p-2 text-center text-sm';
+    dayCell.textContent = day;
+    daysRow.appendChild(dayCell);
+  });
+  
+  calendar.appendChild(daysRow);
+  
+  // Calculate days grid
+  var firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+  var daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+  var daysInLastMonth = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
+  
+  var today = new Date();
+  var isCurrentMonth = date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear();
+  
+  // Create days grid
+  var daysGrid = document.createElement('div');
+  daysGrid.className = 'grid grid-cols-7';
+  
+  // Previous month days
+  for (var i = 0; i < firstDay; i++) {
+    var dayCell = document.createElement('div');
+    dayCell.className = 'calendar-cell outside';
+    dayCell.textContent = daysInLastMonth - firstDay + i + 1;
+    daysGrid.appendChild(dayCell);
+  }
+  
+  // Current month days
+  for (var i = 1; i <= daysInMonth; i++) {
+    var dayCell = document.createElement('div');
+    dayCell.className = 'calendar-cell';
+    
+    // Highlight today
+    if (isCurrentMonth && i === today.getDate()) {
+      dayCell.classList.add('today');
+    }
+    
+    dayCell.textContent = i;
+    daysGrid.appendChild(dayCell);
+  }
+  
+  // Next month days
+  var totalCells = firstDay + daysInMonth;
+  var remainingCells = totalCells > 35 ? 42 - totalCells : 35 - totalCells;
+  
+  for (var i = 1; i <= remainingCells; i++) {
+    var dayCell = document.createElement('div');
+    dayCell.className = 'calendar-cell outside';
+    dayCell.textContent = i;
+    daysGrid.appendChild(dayCell);
+  }
+  
+  calendar.appendChild(daysGrid);
+  widget.appendChild(calendar);
+}
+
+// Initialize calendar
+document.addEventListener('DOMContentLoaded', function() {
+  initCalendar(document.getElementById('calendari'), new Date());
+});
+</script>
+
+</body>
+</html>
